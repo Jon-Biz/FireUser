@@ -1,7 +1,7 @@
 /* global Firebase: true */
 'use strict';
 
-angular.module('fireUser')
+angular.module('fireUser', ['firebase'])
 .constant('FBURL', 'https://schmoozr-dev.firebaseio.com/')
 .service('$fireUser', ['$firebaseAuth', '$rootScope', '$location', 'FBURL', 'defaultStylePath',
   function ($firebaseAuth, $rootScope, $location, FBURL, defaultStylePath) {
