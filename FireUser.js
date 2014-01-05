@@ -3,19 +3,12 @@
 
 angular.module('fireUser', ['firebase'])
 .constant('FBURL', 'https://schmoozr-dev.firebaseio.com/')
-.service('$fireUser', ['$firebaseAuth', '$rootScope', '$location', 'FBURL', 'defaultStylePath',
-  function ($firebaseAuth, $rootScope, $location, FBURL, defaultStylePath) {
+.service('$fireUser', ['$firebaseAuth', '$rootScope', '$location', 'FBURL',
+  function ($firebaseAuth, $rootScope, $location, FBURL) {
 
     var firebaseRef = new Firebase(FBURL);
 
     $rootScope.auth = $firebaseAuth(firebaseRef, {'path': '/login'});
-
-    $rootScope.$on('$firebaseAuth:logout', function() {
-      console.log('changing back to default theme: ' + defaultStylePath);
-      $rootScope.stylePath = defaultStylePath;
-      $rootScope.visible = true;
-      $rootScope.$apply();
-    });
 
     $rootScope.$on('$firebaseAuth:error', function(err) {
       console.log('There was an error during authentication.', err);
