@@ -1,66 +1,83 @@
-/* global Firebase: true */
 'use strict';
+
+// TODO: allow users to set:
+//  - redirect URL on login success
+//  - $rootScope var that stores data
+//  - FBURL
 
 angular.module('fireUser', ['firebase'])
 .constant('FBURL', 'https://schmoozr-dev.firebaseio.com/')
-.service('$fireUser', ['$firebaseAuth', '$rootScope', '$location', 'FBURL',
-  function ($firebaseAuth, $rootScope, $location, FBURL) {
+.service('$fireUser', ['$firebaseAuth', '$firebase', '$rootScope', '$location', 'FBURL', '$log',
+  function ($firebaseAuth, $firebase, $rootScope, $location, FBURL, $log) {
+    // Possible events broadcasted by this service
+    this.USER_CREATED_EVENT = 'fireuser:user_created';
+    this.LOGIN_EVENT = 'fireuser:login';
+    this.LOGIN_ERROR_EVENT = 'fireuser:login_error';
+    this.LOGOUT_EVENT = 'fireuser:logout';
+    this.USER_DATA_CHANGED_EVENT = 'fireuser:data_changed';
+    this.USER_DATA_LOADED_EVENT = 'fireuser:data_loaded';
+    this.USER_CREATION_ERROR_EVENT = 'fireuser:user_creation_error';
 
-    var firebaseRef = new Firebase(FBURL);
+    // kickoff the authentication call (fires events $firebaseAuth:* events)
+    var auth = $firebaseAuth(new Firebase(FBURL), {'path': '/login'});
+    var self = this;
+    var unbind = null;
+    var _angularFireRef = null;
 
-    $rootScope.auth = $firebaseAuth(firebaseRef, {'path': '/login'});
-
-    $rootScope.$on('$firebaseAuth:error', function(err) {
-      console.log('There was an error during authentication.', err);
+    $rootScope.$on('$firebaseAuth:logout', function() {
+      $rootScope.$broadcast(self.LOGOUT_EVENT);
     });
 
+    $rootScope.$on('$firebaseAuth:error', function(err) {
+      $rootScope.$broadcast(self.LOGIN_ERROR_EVENT);
+      $log.info('There was an error during authentication.', err);
+    });
 
     $rootScope.$on('$firebaseAuth:login', function(evt, user) {
-      console.log($rootScope.auth);
-      console.log('logged in');
-      $rootScope.visible = true;
+      $location.path('/');
+      _angularFireRef = $firebase(new Firebase(FBURL + 'userdata/' + user.id));
+      $rootScope.userdata = angular.copy(_angularFireRef);
+      _angularFireRef.$bind($rootScope, 'userdata').then(function(unb) {
+        unbind = unb;
+      });
 
-      var greeting = 'Welcome ' +
-        ($rootScope.auth.user.displayName || $rootScope.auth.user.email) + '!';
-      $rootScope.userdata = {
-        'themes': [{name: 'howard', style:0, greeting: greeting}],
-        'theme': 0
-      };
+      $rootScope.userdata.$on('loaded', function(data) {
+        $rootScope.$broadcast(self.USER_DATA_LOADED_EVENT, data);
+      });
 
-      $rootScope.$broadcast('data:loaded');
-
-      if(angular.equals($location.path(), '/login')){
-        $location.path('/');
-      }
-
-      $rootScope.visible = true;
+      $rootScope.userdata.$on('change', function(data) {
+        $rootScope.$broadcast(self.USER_DATA_CHANGED_EVENT, data);
+      });
     });
 
     this.newUser = function (user) {
-      $rootScope.auth.$createUser(user.email, user.password, function(error, user) {
+      auth.$createUser(user.email, user.password, function(error, user) {
         if (!error) {
-          console.log('Success - User Id: ' + user.id + ', Email: ' + user.email);
+          $rootScope.$broadcast(self.USER_CREATED_EVENT);
+          $log.info('User created - User Id: ' + user.id + ', Email: ' + user.email);
         } else {
-          console.log(error);
+          $rootScope.$broadcast(self.USER_CREATION_ERROR_EVENT);
+          $log.error(error);
         }
       });
     };
 
     this.login = function (user) {
-      $rootScope.auth.$login('password',{
+      auth.$login('password',{
         email: user.email,
         password: user.password
       });
     };
 
     this.loginCustom = function(type) {
-      $rootScope.auth.$login(type);
+      auth.$login(type);
     };
 
     this.logout = function() {
-      $rootScope.auth.$logout();
+      auth.$logout();
+      $location.path('/login');
+      unbind();
     };
-
     return this;
   }
 ]);
