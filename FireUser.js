@@ -8,7 +8,8 @@
 angular.module('fireUser', ['firebase'])
 .constant('FBopts', {
   url:'https://schmoozr-dev.firebaseio.com/',
-  redirectPath:'/login'
+  redirectPath:'/login',
+  datalocation:'/userdata'
 })
 .service('$fireUser', ['$firebaseAuth', '$firebase', '$rootScope', '$location', 'FBOpts', '$log',
   function ($firebaseAuth, $firebase, $rootScope, $location, FBOpts, $log) {
@@ -40,8 +41,8 @@ angular.module('fireUser', ['firebase'])
     $rootScope.$on('$firebaseAuth:login', function(evt, user) {
 
       $location.path('/');
-      _angularFireRef = $firebase(new Firebase(FBOpts.url + 'userdata/' + user.id));
-      
+      var FirebaseUrl = new Firebase(FBOpts.url + FBOpts.datalocation + user.id);
+      var _angularFireRef = $firebase(FirebaseUrl);
       $rootScope.userdata = angular.copy(_angularFireRef);
       
       _angularFireRef.$bind($rootScope, 'userdata').then(function(unb) {
@@ -49,12 +50,11 @@ angular.module('fireUser', ['firebase'])
       });
 
       $rootScope.userdata.$on('loaded', function(data) {
-        console.log('loaded')
         $rootScope.$broadcast(self.USER_DATA_LOADED_EVENT, data);
       });
 
       $rootScope.userdata.$on('change', function(data) {
-        $rootScope.$emit(self.USER_DATA_CHANGED_EVENT, data);
+        $rootScope.$broadcast(self.USER_DATA_CHANGED_EVENT, data);
       });
 
       $rootScope.$broadcast(self.LOGIN_EVENT, user);
@@ -90,4 +90,4 @@ angular.module('fireUser', ['firebase'])
     };
   return this;
   }
-]);
+])

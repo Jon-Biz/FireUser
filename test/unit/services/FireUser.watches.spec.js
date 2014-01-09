@@ -2,52 +2,49 @@
 
 
 describe('FirebaseRef Service', function () {
-  var testUrl;
   beforeEach(function() {
 
+    // Firebase Global
     var FirebaseStub = this.FirebaseStub = sinon.stub();
     window.Firebase = sinon.stub().returns(FirebaseStub);
-
   });
-  beforeEach(function() {
-        
-    angular.module('firebase',[])
-      // .service('$firebase',firebaseMock)
-      // .constant('FBOpts',FBOpts)
-      // .service('$firebaseAuth',firebaseAuthMock);
 
+  beforeEach(function() {
+
+    // AngularFirebase Module    
+    angular.module('firebase',[])
     module('firebase');
 
   });
 
   beforeEach(function() {
 
-    var firebaseStub = this.firebaseStub = sinon.stub().returns(
+    // Test configuration
+    var FBOpts = this.FBOpts = {};
+    FBOpts.url = 'testing';
+    FBOpts.datalocation = '/testPath';
+
+    // Firebase service
+    var firebaseServiceStub = this.firebaseServiceStub = sinon.stub().returns(
       {'$bind':function () {return this;},
       'then':function () {return this;},
       '$on':function () {return this}
     });
 
-    var firebaseMock = this.firebaseMock = sinon.stub().returns(firebaseStub);
+    var firebaseServiceMock = this.firebaseServiceMock = sinon.stub().returns(firebaseServiceStub);
 
-    var FBOpts = this.FBOpts = {};
-    FBOpts.url = 'testing';
-    FBOpts.redirectPath = '/testPath';
-
+    // FirebaseAuth service
     var firebaseAuthStub = this.firebaseAuthStub = sinon.stub();
     var firebaseAuthMock = function () {return firebaseAuthStub;}
 
     module('fireUser', function($provide) {
       $provide.constant('FBOpts', FBOpts);
-      $provide.service('$firebase',firebaseMock);
+      $provide.service('$firebase',firebaseServiceMock);
       $provide.service('$firebaseAuth',firebaseAuthMock);
     });
   });
 
-  beforeEach(function() {
-    var Firebase = this.Firebase = sinon.stub();
-  });
-
+  //Post Instantiation Injection
   beforeEach(inject(function($injector,_$rootScope_,$location) {
     this.location = $location
     this.scope = _$rootScope_.$new();
@@ -71,76 +68,45 @@ describe('FirebaseRef Service', function () {
     expect(authErrorSpy).toHaveBeenCalled();
   })
 
+  //   $rootScope.$on('$firebaseAuth:login', function(evt, user) {
+  //     $location.path('/');
+  //     _angularFireRef = $firebase(new Firebase(FBURL + 'userdata/' + user.id));
+  //     $rootScope.userdata = angular.copy(_angularFireRef);
+  //     _angularFireRef.$bind($rootScope, 'userdata').then(function(unb) {
+  //       unbind = unb;
+  //     });
+
   describe("when it receives the login message", function() {
+    describe("it should retrieve the user's data", function() {
 
-    beforeEach(function() {
-      this.user = {id:'test'}
+      beforeEach(function() {
+        this.user = {id:'test'}
+      });
+
+        
+      it("should redirect the app to the redirectPath - set $location.path to '/'", function() {
+        this.scope.$emit('$firebaseAuth:login',this.user);
+        expect(this.location.path()).toEqual('/' );
+      });
+      
+      it("should call the Firebase Global a second time", function() {
+        expect(window.Firebase).toHaveBeenCalledOnce();
+        this.scope.$emit('$firebaseAuth:login',this.user);
+        expect(window.Firebase).toHaveBeenCalledTwice();      
+      });
+      it("should call the Firebase Global with the apropriate url", function() {
+        var url = this.FBOpts.url + this.FBOpts.datalocation + this.user.id
+        this.scope.$emit('$firebaseAuth:login',this.user);
+        expect(window.Firebase.args[1][0]).toEqual(url);
+      });
+
+      it("should rebroadcast login messages", function() {
+        var loginSpy = sinon.spy();
+        this.scope.$on(this.fireUser.LOGIN_EVENT,loginSpy);
+        this.scope.$emit('$firebaseAuth:login',this.user);
+
+        expect(loginSpy).toHaveBeenCalled();
+      });
     });
-    it("should rebroadcast login messages", function() {
-      var loginSpy = sinon.spy();
-      this.scope.$on(this.fireUser.LOGIN_EVENT,loginSpy);
-      this.scope.$emit('$firebaseAuth:login',this.user);
-
-      expect(loginSpy).toHaveBeenCalled();
-    })
-
-    it("should set $location.path to '/'", function() {
-
-      this.scope.$emit('$firebaseAuth:login',this.user);
-
-      expect(this.location.path()).toEqual('/');
-    });
-    
-    it("should call $firebase service", function() {
-      expect(this.firebaseMock).toHaveBeenCalled();
-    });
-
-    it("should call $firebase service with the apropriate url", function() {
-      var url = this.FBOpts.url + this.FBOpts.dataloc + this.user.id
-//      expect(this.firebaseMock.calledWithNew()).toBeTruthy();
-      console.log(window.Firebase.args);
-      expect(window.Firebase.calledWithNew()).toBeTruthy();
-    });
-
-  });
-
-  xdescribe("when login message has received", function() {
-    beforeEach(function() {
-      this.scope.$emit('$firebaseAuth:login',{id:'test'});    
-    });
-    
-    it("should rebroadcast logout messages", function() {
-
-      var loadedSpy = sinon.spy();
-      this.scope.$on(this.fireUser.USER_DATA_LOADED_EVENT,loadedSpy);
-      this.scope.$broadcast('loaded');
-
-      expect(loadedSpy).toHaveBeenCalled();
-
-      // var changeSpy = sinon.spy();
-      // this.scope.$on(this.fireUser.USER_DATA_CHANGED_EVENT,changeSpy);
-      // this.scope.$broadcast('change');
-
-      // expect(changeSpy).toHaveBeenCalled();
-
-    //   $rootScope.$on('$firebaseAuth:login', function(evt, user) {
-    //     $location.path('/');
-    //     _angularFireRef = $firebase(new Firebase(FBURL + 'userdata/' + user.id));
-    //     $rootScope.userdata = angular.copy(_angularFireRef);
-    //     _angularFireRef.$bind($rootScope, 'userdata').then(function(unb) {
-    //       unbind = unb;
-    //     });
-
-    //     $rootScope.userdata.$on('loaded', function(data) {
-    //       $rootScope.$broadcast(self.USER_DATA_LOADED_EVENT, data);
-    //     });
-
-    //     $rootScope.userdata.$on('change', function(data) {
-    //       $rootScope.$broadcast(self.USER_DATA_CHANGED_EVENT, data);
-    //     });
-    //   });
-
-    });
-
   });
 });
