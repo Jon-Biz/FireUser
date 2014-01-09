@@ -6,6 +6,15 @@
 //  - FBURL
 
 angular.module('fireUser', ['firebase'])
+.directive('fireuserlogingithub',function () {
+  return {
+    template: '<i />',
+    restrict:'E',
+    link:function ($scope,element,attr) {
+        element.addClass('fa');
+    }
+  }
+})
 .constant('FBopts', {
   url:'https://schmoozr-dev.firebaseio.com/',
   redirectPath:'/login',
