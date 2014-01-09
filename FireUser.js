@@ -6,9 +6,12 @@
 //  - FBURL
 
 angular.module('fireUser', ['firebase'])
-.constant('FBURL', 'https://schmoozr-dev.firebaseio.com/')
-.service('$fireUser', ['$firebaseAuth', '$firebase', '$rootScope', '$location', 'FBURL', '$log',
-  function ($firebaseAuth, $firebase, $rootScope, $location, FBURL, $log) {
+.constant('FBopts', {
+  url:'https://schmoozr-dev.firebaseio.com/',
+  redirectPath:'/login'
+})
+.service('$fireUser', ['$firebaseAuth', '$firebase', '$rootScope', '$location', 'FBOpts', '$log',
+  function ($firebaseAuth, $firebase, $rootScope, $location, FBOpts, $log) {
     // Possible events broadcasted by this service
     this.USER_CREATED_EVENT = 'fireuser:user_created';
     this.LOGIN_EVENT = 'fireuser:login';
@@ -18,8 +21,9 @@ angular.module('fireUser', ['firebase'])
     this.USER_DATA_LOADED_EVENT = 'fireuser:data_loaded';
     this.USER_CREATION_ERROR_EVENT = 'fireuser:user_creation_error';
 
+
     // kickoff the authentication call (fires events $firebaseAuth:* events)
-    var auth = $firebaseAuth(new Firebase(FBURL), {'path': '/login'});
+    var auth = $firebaseAuth(new Firebase(FBOpts.url), {'path': FBOpts.redirectPath});
     var self = this;
     var unbind = null;
     var _angularFireRef = null;
@@ -34,20 +38,26 @@ angular.module('fireUser', ['firebase'])
     });
 
     $rootScope.$on('$firebaseAuth:login', function(evt, user) {
+
       $location.path('/');
-      _angularFireRef = $firebase(new Firebase(FBURL + 'userdata/' + user.id));
+      _angularFireRef = $firebase(new Firebase(FBOpts.url + 'userdata/' + user.id));
+      
       $rootScope.userdata = angular.copy(_angularFireRef);
+      
       _angularFireRef.$bind($rootScope, 'userdata').then(function(unb) {
         unbind = unb;
       });
 
       $rootScope.userdata.$on('loaded', function(data) {
+        console.log('loaded')
         $rootScope.$broadcast(self.USER_DATA_LOADED_EVENT, data);
       });
 
       $rootScope.userdata.$on('change', function(data) {
-        $rootScope.$broadcast(self.USER_DATA_CHANGED_EVENT, data);
+        $rootScope.$emit(self.USER_DATA_CHANGED_EVENT, data);
       });
+
+      $rootScope.$broadcast(self.LOGIN_EVENT, user);
     });
 
     this.newUser = function (user) {
@@ -78,6 +88,6 @@ angular.module('fireUser', ['firebase'])
       $location.path('/login');
       unbind();
     };
-    return this;
+  return this;
   }
 ]);
