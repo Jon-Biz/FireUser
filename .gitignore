@@ -1,2 +1,3 @@
 *.sublime*
 */bower_components/*
+.DS_Store
