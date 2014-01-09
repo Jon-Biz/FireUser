@@ -6,19 +6,48 @@
 //  - FBURL
 
 angular.module('fireUser', ['firebase'])
-.directive('fireuserlogingithub',function () {
+.directive('fireuserlogin',function ($compile,FBopts) {
   return {
-    template: '<i />',
     restrict:'E',
-    link:function ($scope,element,attr) {
-        element.addClass('fa');
+    controller:function ($scope) {
+      $scope.login = function () {
+        console.log('login');
+      }
+    },
+    link:function ($scope,element,attr,ctrl) {
+      if(!attr.type){
+        element.html(
+          '<form id="loginForm" name="loginForm" ng-submit="login()">'+
+            '<formgroup>'+
+              'Email <input class="form-control" type="email" name="email" ng-model="email" required/>'+
+            '</formgroup>'+
+            '<formgroup>'+
+              'Password <input class="form-control" type="text" name="password" ng-model="password" required/>'+
+            '</formgroup>'+
+            '<div class="pull-right">'+
+              '<button id="submitBtn" class="btn" type="submit" value="Log in">Log in</button>'+
+            '</div>'+
+          '</form>'
+        )
+      }
+      else if(attr.type=='github'){
+          element.html(FBopts.githubIcon);      
+        }
+        else if(attr.type=='facebook'){
+          element.html(FBopts.facebookIcon);      
+        }
+
+      $compile(element.contents())($scope);
     }
   }
 })
 .constant('FBopts', {
   url:'https://schmoozr-dev.firebaseio.com/',
   redirectPath:'/login',
-  datalocation:'/userdata'
+  datalocation:'/userdata',
+  githubIcon:'<i class="fa fa-github" />',
+  facebookIcon:'<i class="fa fa-facebook" />'
+
 })
 .service('$fireUser', ['$firebaseAuth', '$firebase', '$rootScope', '$location', 'FBOpts', '$log',
   function ($firebaseAuth, $firebase, $rootScope, $location, FBOpts, $log) {

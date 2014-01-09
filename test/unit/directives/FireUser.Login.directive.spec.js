@@ -1,6 +1,6 @@
 'use strict';
 
-describe("Directive: FireUserLoginGithub", function() {
+describe("Directive: FireUserLogin", function() {
 
   var scope; 
 
@@ -14,10 +14,32 @@ describe("Directive: FireUserLoginGithub", function() {
   beforeEach(inject(function($rootScope) {
       scope = $rootScope.$new();
     }));
-  
-  it("should change the css to 'fa'", inject(function ($compile) {
-       var element = angular.element('<fireuserlogingithub />');
-       element = $compile(element)(scope);
-       expect(element.hasClass('fa')).toBeTruthy();
+
+  describe("if it is used with 'type'='email'", function() {
+    beforeEach(function() {
+         this.element = angular.element('<fireuserlogin>');      
+    });
+
+  });
+
+  describe("if it is used with 'type'='github'", function() {
+    beforeEach(function() {
+         this.element = angular.element('<fireuserlogin type="github"/>');      
+    });
+    it("should change the html to githubIcon", inject(function ($compile) {
+         this.element = $compile(this.element)(scope);
+         expect(this.element.html()).toEqual('<i class="fa fa-github ng-scope"></i>')
     }));
+  });
+
+  describe("if it is used with 'type'='facebook'", function() {
+    beforeEach(function() {
+         this.element = angular.element('<fireuserlogin type="facebook"/>');      
+    });
+    it("should change the html to facebookIcon", inject(function ($compile) {
+         this.element = $compile(this.element)(scope);
+         expect(this.element.html()).toEqual('<i class="fa fa-facebook ng-scope"></i>')
+    }));
+  });  
+
 });
