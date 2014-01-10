@@ -1,6 +1,6 @@
 'use strict';
 
-describe("Directive: FireUserLogin", function() {
+describe("Directive: FireUserLoginForm", function() {
 
   var scope; 
 
@@ -8,38 +8,35 @@ describe("Directive: FireUserLogin", function() {
     // AngularFirebase Module    
     angular.module('firebase',[])
     module('firebase')
-    module('fireUser') 
+
+    var FirebaseStub = this.FirebaseStub = sinon.stub();
+    window.Firebase = function () {
+      return FirebaseStub;
+    };
+
+    var firebaseAuthStub = this.firebaseAuthStub = sinon.stub();
+    var firebaseAuthMock = function () {return firebaseAuthStub;}
+
+    module('fireUser', function($provide) {
+
+      var firebaseMock = function () {
+        return this;
+      }
+
+      var FBOpts = {};      
+      $provide.constant('FBOpts', FBOpts);
+      $provide.service('$firebase',firebaseMock);
+      $provide.service('$firebaseAuth',firebaseAuthMock);
+    });
   });
 
   beforeEach(inject(function($rootScope) {
       scope = $rootScope.$new();
     }));
 
-  describe("if it is used with 'type'='email'", function() {
-    beforeEach(function() {
-         this.element = angular.element('<fireuserlogin>');      
-    });
-
+  beforeEach(function() {
+       this.element = angular.element('<fireuserloginform>');      
   });
 
-  describe("if it is used with 'type'='github'", function() {
-    beforeEach(function() {
-         this.element = angular.element('<fireuserlogin type="github"/>');      
-    });
-    it("should change the html to githubIcon", inject(function ($compile) {
-         this.element = $compile(this.element)(scope);
-         expect(this.element.html()).toEqual('<i class="fa fa-github ng-scope"></i>')
-    }));
-  });
-
-  describe("if it is used with 'type'='facebook'", function() {
-    beforeEach(function() {
-         this.element = angular.element('<fireuserlogin type="facebook"/>');      
-    });
-    it("should change the html to facebookIcon", inject(function ($compile) {
-         this.element = $compile(this.element)(scope);
-         expect(this.element.html()).toEqual('<i class="fa fa-facebook ng-scope"></i>')
-    }));
-  });  
 
 });

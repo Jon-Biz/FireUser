@@ -6,41 +6,6 @@
 //  - FBURL
 
 angular.module('fireUser', ['firebase'])
-.directive('fireuserlogin',function ($compile,FBopts) {
-  return {
-    restrict:'E',
-    controller:function ($scope) {
-      $scope.login = function () {
-        console.log('login');
-      }
-    },
-    link:function ($scope,element,attr,ctrl) {
-      if(!attr.type){
-        element.html(
-          '<form id="loginForm" name="loginForm" ng-submit="login()">'+
-            '<formgroup>'+
-              'Email <input class="form-control" type="email" name="email" ng-model="email" required/>'+
-            '</formgroup>'+
-            '<formgroup>'+
-              'Password <input class="form-control" type="text" name="password" ng-model="password" required/>'+
-            '</formgroup>'+
-            '<div class="pull-right">'+
-              '<button id="submitBtn" class="btn" type="submit" value="Log in">Log in</button>'+
-            '</div>'+
-          '</form>'
-        )
-      }
-      else if(attr.type=='github'){
-          element.html(FBopts.githubIcon);      
-        }
-        else if(attr.type=='facebook'){
-          element.html(FBopts.facebookIcon);      
-        }
-
-      $compile(element.contents())($scope);
-    }
-  }
-})
 .constant('FBopts', {
   url:'https://schmoozr-dev.firebaseio.com/',
   redirectPath:'/login',
@@ -129,3 +94,60 @@ angular.module('fireUser', ['firebase'])
   return this;
   }
 ])
+ .directive('fireuserlogin', function() {
+    return {
+      scope:{
+      },
+      template: '<i ng-click="user.loginCustom(type)"></i>',
+      controller:['$scope','$fireUser',function ($scope, $fireUser) {
+              $scope.login = $fireUser.loginCustom;
+              // body...
+            }],
+      link: function ($scope,element,attr,ctrl) {
+        element.addClass('fa fa-'+attr.type);
+        element.attr({'ng-click':$scope.login(attr.type)});
+      },
+      restrict: 'E' 
+    };
+  })
+
+.directive('fireuserloginform',function ($compile,FBopts) {
+  return {
+    restrict:'E',
+    controller:['$scope', '$fireUser', function ($scope, $fireUser) {
+
+      $scope.login = function () {
+        $fireUser.login({ email: $scope.email, password: $scope.password });
+      }
+
+    }],
+    link:function ($scope,element,attr,ctrl) {
+      if(!attr.type){
+        element.html(
+          '<form id="loginForm" name="loginForm" ng-submit="login()">'+
+            '<formgroup>'+
+              'Email <input class="form-control" type="email" name="email" ng-model="email" required/>'+
+            '</formgroup>'+
+            '<formgroup>'+
+              'Password <input class="form-control" type="text" name="password" ng-model="password" required/>'+
+            '</formgroup>'+
+            '<div class="pull-right">'+
+              '<button id="submitBtn" class="btn" type="submit" value="Log in">Log in</button>'+
+            '</div>'+
+          '</form>'
+        )
+      }
+      else if(attr.type=='github'){
+        if(element.text()==''){
+          element.html(FBopts.githubIcon);      
+        }else{
+          element.addClass
+        }
+      }
+      else if(attr.type=='facebook'){
+        element.html(FBopts.facebookIcon);      
+      }
+      $compile(element.contents())($scope);
+    }
+  }
+})
