@@ -14,8 +14,8 @@ angular.module('fireUser', ['firebase'])
   facebookIcon:'<i class="fa fa-facebook" />'
 
 })
-.service('$fireUser', ['$firebaseAuth', '$firebase', '$rootScope', '$location', 'FBOpts', '$log',
-  function ($firebaseAuth, $firebase, $rootScope, $location, FBOpts, $log) {
+.service('$fireUser', ['$firebaseAuth', '$firebase', '$rootScope', '$location', 'FBopts', '$log',
+  function ($firebaseAuth, $firebase, $rootScope, $location, FBopts, $log) {
     // Possible events broadcasted by this service
     this.USER_CREATED_EVENT = 'fireuser:user_created';
     this.LOGIN_EVENT = 'fireuser:login';
@@ -27,7 +27,7 @@ angular.module('fireUser', ['firebase'])
 
 
     // kickoff the authentication call (fires events $firebaseAuth:* events)
-    var auth = $firebaseAuth(new Firebase(FBOpts.url), {'path': FBOpts.redirectPath});
+    var auth = $firebaseAuth(new Firebase(FBopts.url), {'path': FBopts.redirectPath});
     var self = this;
     var unbind = null;
     var _angularFireRef = null;
@@ -44,7 +44,7 @@ angular.module('fireUser', ['firebase'])
     $rootScope.$on('$firebaseAuth:login', function(evt, user) {
 
       $location.path('/');
-      var FirebaseUrl = new Firebase(FBOpts.url + FBOpts.datalocation + user.id);
+      var FirebaseUrl = new Firebase(FBopts.url + FBopts.datalocation + user.id);
       var _angularFireRef = $firebase(FirebaseUrl);
       $rootScope.userdata = angular.copy(_angularFireRef);
       
