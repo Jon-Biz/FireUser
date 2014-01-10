@@ -9,7 +9,7 @@ angular.module('fireUser', ['firebase'])
 .constant('FBopts', {
   url:'https://schmoozr-dev.firebaseio.com/',
   redirectPath:'/login',
-  datalocation:'/userdata',
+  datalocation:'/userdata/',
   githubIcon:'<i class="fa fa-github" />',
   facebookIcon:'<i class="fa fa-facebook" />'
 
@@ -97,15 +97,15 @@ angular.module('fireUser', ['firebase'])
  .directive('fireuserlogin', function() {
     return {
       scope:{
+        type:'@'
       },
-      template: '<i ng-click="user.loginCustom(type)"></i>',
+      replace: true,
+      template: '<i ng-click="login(type)"></i>',
       controller:['$scope','$fireUser',function ($scope, $fireUser) {
-              $scope.login = $fireUser.loginCustom;
-              // body...
-            }],
+        $scope.login = $fireUser.loginCustom;
+      }],
       link: function ($scope,element,attr,ctrl) {
         element.addClass('fa fa-'+attr.type);
-        element.attr({'ng-click':$scope.login(attr.type)});
       },
       restrict: 'E' 
     };
@@ -113,6 +113,7 @@ angular.module('fireUser', ['firebase'])
 
 .directive('fireuserloginform',function ($compile,FBopts) {
   return {
+    scope:{},
     restrict:'E',
     controller:['$scope', '$fireUser', function ($scope, $fireUser) {
 
