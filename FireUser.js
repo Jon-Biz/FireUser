@@ -98,14 +98,17 @@ angular.module('fireUser', ['firebase'])
     return {
       scope:{
       },
-      template: '<i ng-click="user.loginCustom(type)"></i>',
+      replace: true,
+      template: '<i ng-click="logmein()"></i>',
       controller:['$scope','$fireUser',function ($scope, $fireUser) {
               $scope.login = $fireUser.loginCustom;
               // body...
             }],
       link: function ($scope,element,attr,ctrl) {
+        $scope.logmein = function () {
+          $scope.login(attr.type);
+        }
         element.addClass('fa fa-'+attr.type);
-        element.attr({'ng-click':$scope.login(attr.type)});
       },
       restrict: 'E' 
     };
