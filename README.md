@@ -1,71 +1,74 @@
 #FireUser
 
-FireUser is a user management module for Angular Firebase applications. You provide FireUser with your firebase URL and call its api (login, logout), and FireUser handles 
+FireUser is a user management module for Angular Firebase applications.  Configure FireUser with your firebase URL and data location, drop some of the accompanying directives (````<FireUserLogin />````,````<FireUserLogout />```` etc) into your app and your users can create accounts and store their data in your firebase database.
 
-###What does this provide me that I can't get directly from Firebase's AngularFire library?
-
-AngularFire provides methods for logging users in and out and binding to data. FireUser encapsulates the user management process that AngularFire provides, so that all you have to worry about is configuring your firebase url, setting up authorized routes and including User Management directives.
-
-FireUser comes with it's own set of directives, providing for registration and login in via Github, Facebook, or email, and logout. You can use these, or make your own 
+FireUser includes directives for user management, Firebase's email login and federated login methods (ie - Github, Facebook, Twitter). 
 
 By default, icon directives use the font awesome icon font, though you can override this with any class based behaviour, or just use them to wrap something else, such as text. Use these directives to add functionality quickly, or access the API directly with your own.
 
+FireUser handles user registration, login and databinding. 
+It encapsulates user management and sets up databinding.
+
 # Usage
 ## Installation
+Install via bower
 
-### bower
+	bower install fireUser --save
 
-		bower install fireUser --save
-
-### from github
-
-	Clone this github directory 
+Or clone the repo this document is a part of.
 
 ## Setup
 
-In addition to being referenced in your index.html and specified in your app's dependencies, you will need to configure FireUser with your FireBase url, data directroy, and, optionally third party secrets for facebook API.
+###Preparation
 
-You can provide your configuration details to FireUser one of two ways: by providing an options constant to the fireuser module, of by injecting them with $provider
+Like any angular project, add a reference to fireUser.js in your index.html, and specify module ````FireUser```` in your application's dependencies.
+
+###Step1.
+
+Now, you need to specify your project's Firebase url, where you want to place the data, and (optionally) third party secrets for facebook API. We'll do this by creating a contant in the Firebase module
+
+Here's is an example fireUser configuration. Only FBUrl is required - the rest are optional.
 
 ### FireUser options constant
 
 	angular.module('FireUser').constant('FBOpt',{
 		FBurl:"http://your/firebase/url",
-		DataDir: "nameOfRootData", //where you want
-		scope: "yourscope", //defaults to rootScope
-		githubsecret: "23232323", // optional
-		githubiconclass: "fa fa-github"
-		facebooksecret: "32323232", // optional
-		facebookiconclass: "fa fa-facebook"
+		DataDir: "nameOfRootDataDir",	
+		scope: "yourscope",
+		debug: true, 		
+		githubSecret: "23232323"
+		githubIconClass: "fa fa-github"
+		facebookSecret: "32323232"
+		facebookIconClass: "fa fa-facebook"
+		twitterSecret: "23232323"
+		twitterIconClass: "fa fa-github"
+
 		gravatar: "4343"
 
 		debug: true	// outputs error to console. defaults to false
 		})
 
-FBUrl: this is your firebase url. It does not include the DataDir
+````FBUrl````: this is your firebase url. 
 
-DataDir: this is the name of the data object you want to bind to your firebase data, and the name of the firebase data.
+````DataDir```` *(optional)*: this is the name of the data object you want to bind to your firebase data, and the name of the firebase data. Defaults to ````userdata````
 
-scope: this is the scope that you want to attached the data to. It defaults to rootscope
+````scope```` *(optional)*: this is the scope that you want to attached the data to. It defaults to rootscope
 
-debug: outputs all errors to console. defaults to false
+````debug```` *(optional)*: outputs all errors to console. defaults to false
 
-### By injecting the data via $provider
+````githubSecret````, 
+````facebookSecret````, 
+````twitterSecret```` : If you are using the included FireUserLogin directives to provide login, provide your Application's secret here.
 
+````githubIconClass````, 
+````facebookIconClass````, 
+````twitterIconClass```` :
 
-####auth secrets and auth icon classes
+Css Classes to be added to the contents of the login tag. This could be font icon specification, as above, or any css that you want to apply to a test based button.
 
-The auth secrets are your application authorization secret with the auth provider. The auth iconclass is a css class applied to your icon, defaulted to favicon. If you are using something else, then specify the class to be applied here.
-
-## Setting up your routes
-
-There's no point in having users log in if they can just wander about anywhere, now is it?
-
-
+A ````FireUserLogin```` directive without any text contents shows up as an icon tag ````<i></i>```` for use with font based icon sets. Apply any classes you need to specify your icon here. Keep in mind that you can also add class wherever you specify
 
 ## Directives
-
-FireUser provides several directives for imediately 
 
 ### Logging in
 
