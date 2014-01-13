@@ -1,15 +1,11 @@
 #FireUser
 
-FireUser is a user management module for Angular Firebase applications.  Configure FireUser with your firebase URL and data location, drop some of the accompanying directives (````<FireUserLogin />````,````<FireUserLogout />```` etc) into your app and your users can create accounts and store their data in your firebase database.
+FireUser is a user management module for Angular Firebase applications.  Configure FireUser with your firebase URL and data location, drop some of the accompanying directives (````<FireUserLogin />````,````<FireUserLogout />```` etc) into your app and store your users' data in your firebase database.
 
-FireUser includes directives for user management, Firebase's email login and federated login methods (ie - Github, Facebook, Twitter). 
+FireUser handles user registration, login and databinding, and includes directives for user management, Firebase's email login and federated login methods (ie - Github, Facebook, Twitter) (though naturally, you can create you own.)
 
-By default, icon directives use the font awesome icon font, though you can override this with any class based behaviour, or just use them to wrap something else, such as text. Use these directives to add functionality quickly, or access the API directly with your own.
+con directives use the font awesome icon font, though you can override this with any class based behaviour, or just use them to wrap something else, such as text. Use these directives to add functionality quickly, or access the API directly with your own.
 
-FireUser handles user registration, login and databinding. 
-It encapsulates user management and sets up databinding.
-
-# Usage
 ## Installation
 Install via bower
 
@@ -19,17 +15,20 @@ Or clone the repo this document is a part of.
 
 ## Setup
 
-###Preparation
-
-Like any angular project, add a reference to fireUser.js in your index.html, and specify module ````FireUser```` in your application's dependencies.
-
-###Step1.
-
-Now, you need to specify your project's Firebase url, where you want to place the data, and (optionally) third party secrets for facebook API. We'll do this by creating a contant in the Firebase module
-
-Here's is an example fireUser configuration. Only FBUrl is required - the rest are optional.
-
 ### FireUser options constant
+
+Like any angular project, you will need to add a reference to fireUser.
+js in your index.html, and specify module ````FireUser```` in your application's dependencies.
+
+With that out of the way, you need to specify your project's Firebase url, where you want to place the data, and (optionally) third party secrets for facebook API. Do this by creating a contant in the Firebase module. 
+
+Here's a minimal example fireUser configuration:
+
+	angular.module('FireUser').constant('FBOpt',{
+		FBurl:"http://your/firebase/url"
+		};
+
+And here's one with every  optional configuration parameter:
 
 	angular.module('FireUser').constant('FBOpt',{
 		FBurl:"http://your/firebase/url",
@@ -42,9 +41,6 @@ Here's is an example fireUser configuration. Only FBUrl is required - the rest a
 		facebookIconClass: "fa fa-facebook"
 		twitterSecret: "23232323"
 		twitterIconClass: "fa fa-github"
-
-		gravatar: "4343"
-
 		debug: true	// outputs error to console. defaults to false
 		})
 
@@ -66,23 +62,33 @@ Here's is an example fireUser configuration. Only FBUrl is required - the rest a
 
 Css Classes to be added to the contents of the login tag. This could be font icon specification, as above, or any css that you want to apply to a test based button.
 
-A ````FireUserLogin```` directive without any text contents shows up as an icon tag ````<i></i>```` for use with font based icon sets. Apply any classes you need to specify your icon here. Keep in mind that you can also add class wherever you specify
-
 ## Directives
 
 ### Logging in
 
-### `<FireUserLoginGithub />` or `<FireUserLoginGithub>...</FireUserLoginGithub>`
-### `<FireUserLoginFacebook />` or `<FireUserLoginFacebook />...<FireUserLoginFacebook />`
+````<FireUserLogin type='yourloginproviderhere'/>```` 
+
+If you leave the div empty, it will be turned into an <i>, for use with css based font icon libraries such as fontawesome. 
+If you don't use any text, the directive will assume you are using it as a font icon, and change the html to an icon - <i>. Use the Class configuration to specify the css that will display your font icon. If you leave the ````IconClass```` empty, it will default to fontawesome css font library. So:
+
+	<FireUserLogin type='github' />
+
+	becomes
+
+	<i class='fa fa-github' ></i>
+
+### ````<FireUserLoginForm />````
+
+This directive
 
 These provide a button that 
+### Logging out
 
 ### `<FireUserLogOut />`
-### `<FireUserLogin />`
 
+### Signup
 
 ### `<FireUserSignUp />`
-
 
 Creates a Signup Form with user name, password etc.
 
@@ -90,5 +96,30 @@ Creates a Signup Form with user name, password etc.
 
 ## API
 
-LogIn
-LogOut
+The api wraps the angularfire modules access methods, so if you prefer to point your directives to that, you can do so.
+
+````LogIn(user)````
+
+User is a either a scope or an object containing ````user.email```` and ````user.password````
+
+````LogOut()````
+
+Logs the user out.
+
+````NewUser(user)````
+
+User is either a scope or an object containing ````user.email```` or ````user.password````
+
+````LoginCustom````
+
+
+
+### Messages
+
+    this.USER_CREATED_EVENT = 'fireuser:user_created';
+    this.LOGIN_EVENT = 'fireuser:login';
+    this.LOGIN_ERROR_EVENT = 'fireuser:login_error';
+    this.LOGOUT_EVENT = 'fireuser:logout';
+    this.USER_DATA_CHANGED_EVENT = 'fireuser:data_changed';
+    this.USER_DATA_LOADED_EVENT = 'fireuser:data_loaded';
+    this.USER_CREATION_ERROR_EVENT = 'fireuser:user_creation_error';
