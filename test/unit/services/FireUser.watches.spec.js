@@ -20,9 +20,9 @@ describe('FirebaseRef Service', function () {
   beforeEach(function() {
 
     // Test configuration
-    var FBOpts = this.FBOpts = {};
-    FBOpts.url = 'testing';
-    FBOpts.datalocation = '/testPath';
+    var FBopts = this.FBopts = {};
+    FBopts.url = 'testing';
+    FBopts.datalocation = '/testPath';
 
     // Firebase service
     var firebaseServiceStub = this.firebaseServiceStub = sinon.stub().returns(
@@ -38,7 +38,7 @@ describe('FirebaseRef Service', function () {
     var firebaseAuthMock = function () {return firebaseAuthStub;}
 
     module('fireUser', function($provide) {
-      $provide.constant('FBOpts', FBOpts);
+      $provide.constant('FBopts', FBopts);
       $provide.service('$firebase',firebaseServiceMock);
       $provide.service('$firebaseAuth',firebaseAuthMock);
     });
@@ -95,7 +95,7 @@ describe('FirebaseRef Service', function () {
         expect(window.Firebase).toHaveBeenCalledTwice();      
       });
       it("should call the Firebase Global with the apropriate url", function() {
-        var url = this.FBOpts.url + this.FBOpts.datalocation + this.user.id
+        var url = this.FBopts.url + this.FBopts.datalocation + this.user.id
         this.scope.$emit('$firebaseAuth:login',this.user);
         expect(window.Firebase.args[1][0]).toEqual(url);
       });
