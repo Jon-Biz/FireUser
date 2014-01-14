@@ -7,15 +7,21 @@
 
 angular.module('fireUser', ['firebase'])
 .constant('FBopts', {
-  url:'https://schmoozr-dev.firebaseio.com/',
   redirectPath:'/login',
   datalocation:'/userdata/',
   githubIcon:'<i class="fa fa-github" />',
   facebookIcon:'<i class="fa fa-facebook" />'
-
 })
-.service('$fireUser', ['$firebaseAuth', '$firebase', '$rootScope', '$location', 'FBopts', '$log',
-  function ($firebaseAuth, $firebase, $rootScope, $location, FBopts, $log) {
+.value('FireUserConfig',function(){
+  return {}
+})
+.service('$fireUser', ['$firebaseAuth', '$firebase', '$rootScope', '$location', 'FBopts', 'FireUserConfig','$log',
+  function ($firebaseAuth, $firebase, $rootScope, $location, FBopts, FireUserConfig, $log) {
+
+    this.options = angular.extend(FBopts,FireUserConfig);    
+
+
+
     // Possible events broadcasted by this service
     this.USER_CREATED_EVENT = 'fireuser:user_created';
     this.LOGIN_EVENT = 'fireuser:login';
