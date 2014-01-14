@@ -18,16 +18,16 @@ describe('FirebaseRef Service', function () {
     var firebaseAuthStub = this.firebaseAuthStub = sinon.stub();
     var firebaseAuthMock = function () {return firebaseAuthStub;}
 
-    var FBOpts = this.FBOpts = {};
-    FBOpts.url = 'testing';
-    FBOpts.redirectPath = '/testPath';
+    var FireUserDefault = this.FireUserDefault = {};
+    FireUserDefault.url = 'testing';
+    FireUserDefault.redirectPath = '/testPath';
     module('fireUser', function($provide) {
 
       var firebaseMock = function () {
         return this;
       }
       
-      $provide.constant('FBOpts', FBOpts);
+      $provide.constant('FireUserDefault', FireUserDefault);
       $provide.service('$firebase',firebaseMock);
       $provide.service('$firebaseAuth',firebaseAuthMock);
     });

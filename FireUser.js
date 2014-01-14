@@ -6,7 +6,7 @@
 //  - FBURL
 
 angular.module('fireUser', ['firebase'])
-.constant('FBopts', {
+.constant('FireUserDefault', {
   redirectPath:'/login',
   datalocation:'/userdata/',
   githubIcon:'<i class="fa fa-github" />',
@@ -15,10 +15,10 @@ angular.module('fireUser', ['firebase'])
 .value('FireUserConfig',function(){
   return {}
 })
-.service('$fireUser', ['$firebaseAuth', '$firebase', '$rootScope', '$location', 'FBopts', 'FireUserConfig','$log',
-  function ($firebaseAuth, $firebase, $rootScope, $location, FBopts, FireUserConfig, $log) {
+.service('$fireUser', ['$firebaseAuth', '$firebase', '$rootScope', '$location', 'FireUserDefault', 'FireUserConfig','$log',
+  function ($firebaseAuth, $firebase, $rootScope, $location, FireUserDefault, FireUserConfig, $log) {
 
-    this.options = angular.extend(FBopts,FireUserConfig);    
+    this.options = angular.extend(FireUserDefault,FireUserConfig);    
 
 
 
@@ -33,7 +33,7 @@ angular.module('fireUser', ['firebase'])
 
 
     // kickoff the authentication call (fires events $firebaseAuth:* events)
-    var auth = $firebaseAuth(new Firebase(FBopts.url), {'path': FBopts.redirectPath});
+    var auth = $firebaseAuth(new Firebase(FireUserDefault.url), {'path': FireUserDefault.redirectPath});
     var self = this;
     var unbind = null;
     var _angularFireRef = null;
@@ -50,7 +50,7 @@ angular.module('fireUser', ['firebase'])
     $rootScope.$on('$firebaseAuth:login', function(evt, user) {
 
       $location.path('/');
-      var FirebaseUrl = new Firebase(FBopts.url + FBopts.datalocation + user.id);
+      var FirebaseUrl = new Firebase(FireUserDefault.url + FireUserDefault.datalocation + user.id);
       var _angularFireRef = $firebase(FirebaseUrl);
       $rootScope.userdata = angular.copy(_angularFireRef);
       
@@ -117,7 +117,7 @@ angular.module('fireUser', ['firebase'])
     };
   })
 
-.directive('fireuserloginform',function ($compile,FBopts) {
+.directive('fireuserloginform',function ($compile,FireUserDefault) {
   return {
     scope:{},
     restrict:'E',
@@ -146,13 +146,13 @@ angular.module('fireUser', ['firebase'])
       }
       else if(attr.type=='github'){
         if(element.text()==''){
-          element.html(FBopts.githubIcon);      
+          element.html(FireUserDefault.githubIcon);      
         }else{
           element.addClass
         }
       }
       else if(attr.type=='facebook'){
-        element.html(FBopts.facebookIcon);      
+        element.html(FireUserDefault.facebookIcon);      
       }
       $compile(element.contents())($scope);
     }

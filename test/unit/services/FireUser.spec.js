@@ -15,7 +15,7 @@ describe('FirebaseRef Service', function () {
         
     angular.module('firebase',[])
       // .service('$firebase',firebaseMock)
-      // .constant('FBopts',FBopts)
+      // .constant('FireUserDefault',FireUserDefault)
       // .service('$firebaseAuth',firebaseAuthMock);
 
     module('firebase');
@@ -29,15 +29,15 @@ describe('FirebaseRef Service', function () {
       return firebaseStub;
     }
 
-    var FBopts = this.FBopts = {};
-    FBopts.url = 'testing';
-    FBopts.redirectPath = '/testPath';
+    var FireUserDefault = this.FireUserDefault = {};
+    FireUserDefault.url = 'testing';
+    FireUserDefault.redirectPath = '/testPath';
 
     var firebaseAuthStub = this.firebaseAuthStub = sinon.stub();
     var firebaseAuthMock = function () {return firebaseAuthStub;}
 
     module('fireUser', function($provide) {
-      $provide.constant('FBopts', FBopts);
+      $provide.constant('FireUserDefault', FireUserDefault);
       $provide.service('$firebase',firebaseMock);
       $provide.service('$firebaseAuth',firebaseAuthMock);
     });
@@ -68,7 +68,7 @@ describe('FirebaseRef Service', function () {
 
   it('should call firebaseAuth with the redirect page as the 2nd arg',inject(function($fireUser) {
     expect(this.firebaseAuthStub).toHaveBeenCalled();
-    expect(this.firebaseAuthStub.args[0][1]).toEqual({path:this.FBopts.redirectPath})    
+    expect(this.firebaseAuthStub.args[0][1]).toEqual({path:this.FireUserDefault.redirectPath})    
   }));
 
 });
