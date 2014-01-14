@@ -12,8 +12,7 @@ angular.module('fireUser', ['firebase'])
   githubIcon:'<i class="fa fa-github" />',
   facebookIcon:'<i class="fa fa-facebook" />'
 })
-.value('FireUserConfig',{
-})
+.value('FireUserConfig',{})
 .run(['FireUserDefault','FireUserConfig',function (FireUserDefault,FireUserConfig) {
   FireUserConfig = angular.extend(FireUserDefault,FireUserConfig);
 }])
@@ -98,7 +97,7 @@ angular.module('fireUser', ['firebase'])
   return this;
   }
 ])
- .directive('fireuserlogin', function() {
+.directive('fireuserlogin', function() {
     return {
       scope:{
         type:'@'
@@ -114,7 +113,22 @@ angular.module('fireUser', ['firebase'])
       restrict: 'E' 
     };
   })
-
+.directive('fireuserlogout', function() {
+    return {
+      scope:{
+        type:'@'
+      },
+      replace: true,
+      template: '<div ng-click="logout()">Logout</div>',
+      controller:['$scope','$fireUser',function ($scope, $fireUser) {
+        $scope.login = $fireUser.logout;
+      }],
+      link: function ($scope,element,attr,ctrl) {
+        element.addClass('fa fa-'+attr.type);
+      },
+      restrict: 'E' 
+    };
+  })
 .directive('fireuserloginform',function ($compile,FireUserConfig) {
   return {
     scope:{},
@@ -139,6 +153,44 @@ angular.module('fireUser', ['firebase'])
             '<div class="pull-right">'+
               '<button id="submitBtn" class="btn" type="submit" value="Log in">Log in</button>'+
             '</div>'+
+          '</form>'
+        )
+      }
+      else if(attr.type=='github'){
+        if(element.text()==''){
+          element.html(FireUserConfig.githubIcon);      
+        }else{
+          element.addClass
+        }
+      }
+      else if(attr.type=='facebook'){
+        element.html(FireUserConfig.facebookIcon);      
+      }
+      $compile(element.contents())($scope);
+    }
+  }
+})
+.directive("fireusernewuser",function ($compile,FireUserConfig) {
+  return {
+    scope:{},
+    restrict:'E',
+    controller:['$scope', '$fireUser', function ($scope, $fireUser) {
+
+      $scope.createuser = function () {
+        $fireUser.newUser({ email: $scope.email, password: $scope.password });
+      }
+
+    }],
+    link:function ($scope,element,attr,ctrl) {
+      if(!attr.type){
+        element.html(
+          '<form name="signupForm" ng-submit="createUser()">'+
+          '  <forminput title="Name" type="text" />'+
+          '  <forminput title="Email" type="email" />'+
+          '  <forminput title="Password" type="password" />'+
+          '  <br />'+
+          '  <button type="submit" class="btn btn-primary pull-right">Sign Up</button>'+
+          '  <span class="error" ng-show="error">{{error}}</span>'+
           '</form>'
         )
       }
