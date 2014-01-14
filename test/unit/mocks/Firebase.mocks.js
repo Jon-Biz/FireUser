@@ -12,7 +12,7 @@ Mocks ={
       var FBOpts = Mocks.setupFBOpts;      
 
       module('fireUser', function($provide) {
-        var firebaseMock = function () {return that;}
+        var firebaseMock = function () {return this;}
         var FBOpts = {};      
         $provide.constant('FBOpts', FBOpts);
         $provide.service('$firebase',firebaseMock);
