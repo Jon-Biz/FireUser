@@ -18,6 +18,7 @@ module.exports = function(config) {
     'test/bower_components/jasmine-sinon/lib/jasmine-sinon.js',
 
     //test files
+    'test/unit/mocks/**/*.js',
     'test/unit/**/*.js'
   ]);
 };
