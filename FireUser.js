@@ -12,15 +12,13 @@ angular.module('fireUser', ['firebase'])
   githubIcon:'<i class="fa fa-github" />',
   facebookIcon:'<i class="fa fa-facebook" />'
 })
-.value('FireUserConfig',function(){
-  return {}
+.value('FireUserConfig',{
 })
-.service('$fireUser', ['$firebaseAuth', '$firebase', '$rootScope', '$location', 'FireUserDefault', 'FireUserConfig','$log',
-  function ($firebaseAuth, $firebase, $rootScope, $location, FireUserDefault, FireUserConfig, $log) {
-
-    this.options = angular.extend(FireUserDefault,FireUserConfig);    
-
-
+.run(['FireUserDefault','FireUserConfig',function (FireUserDefault,FireUserConfig) {
+  FireUserConfig = angular.extend(FireUserDefault,FireUserConfig);
+}])
+.service('$fireUser', ['$firebaseAuth', '$firebase', '$rootScope', '$location', 'FireUserConfig','$log',
+  function ($firebaseAuth, $firebase, $rootScope, $location, FireUserConfig, $log) {
 
     // Possible events broadcasted by this service
     this.USER_CREATED_EVENT = 'fireuser:user_created';
@@ -33,7 +31,7 @@ angular.module('fireUser', ['firebase'])
 
 
     // kickoff the authentication call (fires events $firebaseAuth:* events)
-    var auth = $firebaseAuth(new Firebase(FireUserDefault.url), {'path': FireUserDefault.redirectPath});
+    var auth = $firebaseAuth(new Firebase(FireUserConfig.url), {'path': FireUserConfig.redirectPath});
     var self = this;
     var unbind = null;
     var _angularFireRef = null;
@@ -50,7 +48,7 @@ angular.module('fireUser', ['firebase'])
     $rootScope.$on('$firebaseAuth:login', function(evt, user) {
 
       $location.path('/');
-      var FirebaseUrl = new Firebase(FireUserDefault.url + FireUserDefault.datalocation + user.id);
+      var FirebaseUrl = new Firebase(FireUserConfig.url + FireUserConfig.datalocation + user.id);
       var _angularFireRef = $firebase(FirebaseUrl);
       $rootScope.userdata = angular.copy(_angularFireRef);
       
@@ -117,7 +115,7 @@ angular.module('fireUser', ['firebase'])
     };
   })
 
-.directive('fireuserloginform',function ($compile,FireUserDefault) {
+.directive('fireuserloginform',function ($compile,FireUserConfig) {
   return {
     scope:{},
     restrict:'E',
@@ -146,13 +144,13 @@ angular.module('fireUser', ['firebase'])
       }
       else if(attr.type=='github'){
         if(element.text()==''){
-          element.html(FireUserDefault.githubIcon);      
+          element.html(FireUserConfig.githubIcon);      
         }else{
           element.addClass
         }
       }
       else if(attr.type=='facebook'){
-        element.html(FireUserDefault.facebookIcon);      
+        element.html(FireUserConfig.facebookIcon);      
       }
       $compile(element.contents())($scope);
     }
