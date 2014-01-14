@@ -44,7 +44,6 @@ describe("Directive: FireUserLogin", function() {
     });
     it("should add the classes for the github icon", inject(function ($compile) {
          this.element = $compile(this.element)(scope);
-         console.log(scope.user)
          expect(this.element.hasClass('fa')).toBeTruthy();
          expect(this.element.hasClass('fa fa-github')).toBeTruthy();
     }));
