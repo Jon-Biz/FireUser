@@ -1,4 +1,5 @@
 #FireUser
+##User management boilerplate for Angular Firebase
 
 FireUser is a user management module for Angular Firebase applications.  Configure FireUser with your firebase URL and data location, drop some of the accompanying directives (````<FireUserLogin />````,````<FireUserLogout />```` etc) into your app and store your users' data in your firebase database.
 
@@ -20,11 +21,20 @@ Or clone the repo this document is a part of.
 Like any angular project, you will need to add a reference to fireUser.
 js in your index.html, and specify module ````FireUser```` in your application's dependencies.
 
-With that out of the way, you need to specify your project's Firebase url, where you want to place the data, and (optionally) third party secrets for facebook API. Do this by creating a contant in the Firebase module. 
+With that out of the way, you need to specify your project's Firebase url, where you want to place the data, and (optionally) third party secrets for facebook API. 
+
+FireUser looks for the variable ````this.options```` and, if it can't find it, throws an error. So, use a decorator to inject the options you need.
 
 Here's a minimal example fireUser configuration:
 
-	angular.module('FireUser').constant('FBOpt',{
+	angular.module('fireUser').config(function ($provide) {
+	    $provide.decorator('$fireUser',function ($delegate) {
+	          $delegate.options = {}
+	          return $delegate;
+	        })
+	    })
+  
+	angular.module('FireUser').decorator('FBOpt',{
 		FBurl:"http://your/firebase/url"
 		};
 
