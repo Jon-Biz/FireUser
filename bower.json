@@ -1,12 +1,27 @@
 {
   "name": "FireUser",
+  "authors": [
+    "Jonathan El-Bizri <git@elbizri.com>",
+    "Austin Brown <thataustin@gmail.com>"
+  ],
+  "license": "MIT",
   "version": "0.1.0",
   "ignore": [
     "**/.*",
-    "*/",
-    "components"
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
   ],
   "dependencies": {
     "angularfire": "~0.5",
+    "angular": "~1.2.7"
+  },
+  "devDependencies": {
+    "angular-mocks": "~1.2.7",
+    "firebase": "~1.0.2",
+    "angularfire": "~0.5.0",
+    "sinon": "~1.7.3",
+    "jasmine-sinon": "~0.3.1"
   }
 }
