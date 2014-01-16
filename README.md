@@ -51,7 +51,7 @@ iconCss specifies the icon font to use with the third party provider logins. Cur
 
 ````<FireUserLogin type='yourloginproviderhere'/>```` 
 
-If you don't use any text, the directive will assume you are using it as a font icon, and change the html to an icon - <i>. Use the Class configuration to specify the css that will display your font icon. If you leave the ````iconCss```` empty, it will default to fontawesome css font library. So:
+Use the Class configuration to specify the css that will display a font for login button. If you leave the ````iconCss```` empty, it will default to fontawesome css font library. So:
 
 	<FireUserLogin type='github' />
 
