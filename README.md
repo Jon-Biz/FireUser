@@ -79,22 +79,22 @@ Creates a Signup Form with user name, password etc.
 
 The api wraps the angularfire modules access methods, so if you prefer to point your directives to that, you can do so.
 
-````LogIn(user)````
+
+####LogIn(user)
 
 User is a either a scope or an object containing ````user.email```` and ````user.password````
 
-````LogOut()````
+####LogOut()
 
 Logs the user out.
 
-````NewUser(user)````
+####NewUser(user)
 
 User is either a scope or an object containing ````user.email```` or ````user.password````
 
+## About
 
-# About
-
-FireUser was created by Jonathan El-Bizri and Austin Brown, two Angular js developers in San Francisco
+FireUser was created by Jonathan El-Bizri and Austin Brown, two Angular js developers in San Francisco.
 
 https://github.com/Jon-Biz
 https://github.com/thataustin
