@@ -9,6 +9,7 @@ angular.module('fireUser', ['firebase'])
 .constant('FireUserDefault', {
   redirectPath:'/login',
   datalocation:'/userdata/',
+  iconCss:'fontawesome'
 })
 .value('FireUserConfig',{})
 .run(['FireUserDefault','FireUserConfig',function (FireUserDefault,FireUserConfig) {
@@ -91,6 +92,15 @@ angular.module('fireUser', ['firebase'])
       $location.path('/login');
       unbind();
     };
+
+    this.changepassword = function (email, oldPassword, newPassword,callback) {
+      auth.changePassword(email, oldPassword, newPassword, callback)
+    };
+
+    this.sendPasswordResetEmail =function ( email, callback ) {
+      auth.sendPasswordResetEmail(email,callback)
+    }
+
   return this;
   }
 ])
@@ -108,7 +118,7 @@ angular.module('fireUser', ['firebase'])
         if(FireUserConfig.iconCss="fontawesome"){
           element.addClass('fa fa-'+attr.type);        
         } else {
-          element.text = "Log In With" + attr.type;
+          element.text = "Log In with" + attr.type;
         }
       },
       restrict: 'E' 
