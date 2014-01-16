@@ -9,8 +9,6 @@ angular.module('fireUser', ['firebase'])
 .constant('FireUserDefault', {
   redirectPath:'/login',
   datalocation:'/userdata/',
-  githubIcon:'<i class="fa fa-github" />',
-  facebookIcon:'<i class="fa fa-facebook" />'
 })
 .value('FireUserConfig',{})
 .run(['FireUserDefault','FireUserConfig',function (FireUserDefault,FireUserConfig) {
@@ -77,16 +75,15 @@ angular.module('fireUser', ['firebase'])
         }
       });
     };
-
-    this.login = function (user) {
-      auth.$login('password',{
-        email: user.email,
-        password: user.password
-      });
-    };
-
-    this.loginCustom = function(type) {
-      auth.$login(type);
+    this.login = function(type,user) {
+      if(type == 'password'){
+        auth.$login('password',{
+          email: user.email,
+          password: user.password
+        });        
+      } else {
+        auth.$login(type);
+      }
     };
 
     this.logout = function() {
@@ -97,7 +94,7 @@ angular.module('fireUser', ['firebase'])
   return this;
   }
 ])
-.directive('fireuserlogin', function() {
+.directive('fireuserlogin', function(FireUserConfig) {
     return {
       scope:{
         type:'@'
@@ -105,10 +102,14 @@ angular.module('fireUser', ['firebase'])
       replace: true,
       template: '<i ng-click="login(type)"></i>',
       controller:['$scope','$fireUser',function ($scope, $fireUser) {
-        $scope.login = $fireUser.loginCustom;
+        $scope.login = $fireUser.login;
       }],
       link: function ($scope,element,attr,ctrl) {
-        element.addClass('fa fa-'+attr.type);
+        if(FireUserConfig.iconCss="fontawesome"){
+          element.addClass('fa fa-'+attr.type);        
+        } else {
+          element.text = "Log In With" + attr.type;
+        }
       },
       restrict: 'E' 
     };
@@ -123,9 +124,6 @@ angular.module('fireUser', ['firebase'])
       controller:['$scope','$fireUser',function ($scope, $fireUser) {
         $scope.login = $fireUser.logout;
       }],
-      link: function ($scope,element,attr,ctrl) {
-        element.addClass('fa fa-'+attr.type);
-      },
       restrict: 'E' 
     };
   })
@@ -136,74 +134,50 @@ angular.module('fireUser', ['firebase'])
     controller:['$scope', '$fireUser', function ($scope, $fireUser) {
 
       $scope.login = function () {
-        $fireUser.login({ email: $scope.email, password: $scope.password });
+        $fireUser.login('password',{ email: $scope.email, password: $scope.password });
       }
 
     }],
     link:function ($scope,element,attr,ctrl) {
-      if(!attr.type){
-        element.html(
-          '<form id="loginForm" name="loginForm" ng-submit="login()">'+
-            '<formgroup>'+
-              'Email <input class="form-control" type="email" name="email" ng-model="email" required/>'+
-            '</formgroup>'+
-            '<formgroup>'+
-              'Password <input class="form-control" type="text" name="password" ng-model="password" required/>'+
-            '</formgroup>'+
-            '<div class="pull-right">'+
-              '<button id="submitBtn" class="btn" type="submit" value="Log in">Log in</button>'+
-            '</div>'+
-          '</form>'
-        )
-      }
-      else if(attr.type=='github'){
-        if(element.text()==''){
-          element.html(FireUserConfig.githubIcon);      
-        }else{
-          element.addClass
-        }
-      }
-      else if(attr.type=='facebook'){
-        element.html(FireUserConfig.facebookIcon);      
-      }
+      element.html(
+        '<form id="loginForm" name="loginForm" ng-submit="login()">'+
+          '<formgroup>'+
+            'Email <input class="form-control" type="email" name="email" ng-model="email" required/>'+
+          '</formgroup>'+
+          '<formgroup>'+
+            'Password <input class="form-control" type="text" name="password" ng-model="password" required/>'+
+          '</formgroup>'+
+          '<div class="pull-right">'+
+            '<button id="submitBtn" class="btn" type="submit" value="Log in">Log in</button>'+
+          '</div>'+
+        '</form>'
+      )
       $compile(element.contents())($scope);
     }
   }
 })
-.directive("fireusernewuser",function ($compile,FireUserConfig) {
+.directive("fireusersignupform",function ($compile,FireUserConfig) {
   return {
     scope:{},
     restrict:'E',
     controller:['$scope', '$fireUser', function ($scope, $fireUser) {
 
-      $scope.createuser = function () {
+      $scope.createUser = function () {
         $fireUser.newUser({ email: $scope.email, password: $scope.password });
       }
 
     }],
     link:function ($scope,element,attr,ctrl) {
-      if(!attr.type){
-        element.html(
-          '<form name="signupForm" ng-submit="createUser()">'+
-          '  <forminput title="Name" type="text" />'+
-          '  <forminput title="Email" type="email" />'+
-          '  <forminput title="Password" type="password" />'+
-          '  <br />'+
-          '  <button type="submit" class="btn btn-primary pull-right">Sign Up</button>'+
-          '  <span class="error" ng-show="error">{{error}}</span>'+
-          '</form>'
-        )
-      }
-      else if(attr.type=='github'){
-        if(element.text()==''){
-          element.html(FireUserConfig.githubIcon);      
-        }else{
-          element.addClass
-        }
-      }
-      else if(attr.type=='facebook'){
-        element.html(FireUserConfig.facebookIcon);      
-      }
+      element.html(
+        '<form name="signupForm" ng-submit="createUser()">'+
+        '  <forminput title="Name" type="text" />'+
+        '  <forminput title="Email" type="email" />'+
+        '  <forminput title="Password" type="password" />'+
+        '  <br />'+
+        '  <button type="submit" class="btn btn-primary pull-right">Sign Up</button>'+
+        '  <span class="error" ng-show="error">{{error}}</span>'+
+        '</form>'
+      )
       $compile(element.contents())($scope);
     }
   }
