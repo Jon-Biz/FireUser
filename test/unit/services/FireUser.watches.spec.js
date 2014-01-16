@@ -94,7 +94,7 @@ describe('FirebaseRef Service', function () {
         this.scope.$emit('$firebaseAuth:login',this.user);
         expect(window.Firebase).toHaveBeenCalledTwice();      
       });
-      it("should call the Firebase Global with the apropriate url", function() {
+      xit("should call the Firebase Global with the apropriate url", function() {
         var url = this.FireUserDefault.url + this.FireUserDefault.datalocation + this.user.id
         this.scope.$emit('$firebaseAuth:login',this.user);
         expect(window.Firebase.args[1][0]).toEqual(url);

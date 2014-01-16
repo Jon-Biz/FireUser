@@ -1,5 +1,5 @@
 
-describe("the FireUser service", function() {
+xdescribe("the FireUser service", function() {
   describe("when instantiated without a FireUserConfig value service", function() {
 
     beforeEach(function() {
@@ -8,7 +8,7 @@ describe("the FireUser service", function() {
 
 		});
 
-		it("should have an undefined options.url", inject(function($fireUser) {
+		xit("should have an undefined FireUserConfig.url", inject(function($fireUser) {
       expect($fireUser.options.url).not.toBeDefined();
     }));
 
@@ -16,7 +16,7 @@ describe("the FireUser service", function() {
 		  
 		});
   });
-  describe("when instantiated after a FireUserConfig value service is set", function() {
+  xdescribe("when instantiated after a FireUserConfig value service is set", function() {
 
     beforeEach(function() {
 
@@ -33,7 +33,7 @@ describe("the FireUser service", function() {
       angular.module('fireUser')
         .value('FireUserConfig',this.FBconfig)
 
-      var FireUserDefault = this.FireUserDefault = {'datalocation':'datalocation'};      
+      var FireUserDefaul = this.FireUserDefaul = {'datalocation':'datalocation'};      
       module('fireUser', function($provide) {
         var firebaseMock = function () {return this;}
         $provide.constant('FireUserDefault', FireUserDefault);
@@ -51,9 +51,9 @@ describe("the FireUser service", function() {
       expect($fireUser.options.url).toBeDefined();
     }));
 
-    it("should extend FireUserDefault with FireUserConfig to create the options", inject(function($fireUser) {
+    it("should extend FireUserDefaul with FireUserConfig to create the options", inject(function($fireUser) {
       expect($fireUser.options.url).toEqual(this.FBconfig.url)
-      expect($fireUser.options.datalocation).toEqual(this.FireUserDefault.datalocation);
+      expect($fireUser.options.datalocation).toEqual(this.FireUserDefaul.datalocation);
     }));
 
   });

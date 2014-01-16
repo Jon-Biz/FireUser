@@ -33,9 +33,15 @@ describe('FirebaseRef Service', function () {
     });
   });
 
-    describe("login()", function() {
-      it("should call $firebas", function() {
+    describe("when login() is called with a string login('github')", function() {
+      it("should call $firebase with that string", function() {
         
       });
     });
+    describe("when login() is called with a object user", function() {
+      it("should call $firebase with 'password',{user.email, user.password}", function() {
+        
+      });
+    });
+
 });
