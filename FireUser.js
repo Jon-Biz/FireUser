@@ -64,7 +64,7 @@ angular.module('fireUser', ['firebase'])
       $rootScope.$broadcast(self.LOGIN_EVENT, user);
     });
 
-    this.newUser = function (user) {
+    this.creatUser = function (user) {
       auth.$createUser(user.email, user.password, function(error, user) {
         if (!error) {
           $rootScope.$broadcast(self.USER_CREATED_EVENT);
@@ -163,7 +163,7 @@ angular.module('fireUser', ['firebase'])
     controller:['$scope', '$fireUser', function ($scope, $fireUser) {
 
       $scope.createUser = function () {
-        $fireUser.newUser({ email: $scope.email, password: $scope.password });
+        $fireUser.createUser({ email: $scope.email, password: $scope.password });
       }
 
     }],
