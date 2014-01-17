@@ -1,7 +1,7 @@
 #FireUser
 ##User management boilerplate for Angularjs & Firebase
 
-FireUser is a user management module for Angular Firebase applications.  Configure FireUser with your firebase URL and data location, drop some of the accompanying directives into your app and you are storing your users' data in your firebase database.
+FireUser is a user management module for Angular Firebase applications.  Configure FireUser with your firebase URL and data location, drop some of the accompanying directives into your app, and you are storing your users' data in your firebase database.
 
 FireUser handles user registration, login and databinding, and includes directives for user management, Firebase's email based login and third party login provider methods (ie - Github, Facebook, Twitter). You can use these directives to add functionality quickly, or access the API directly with your own - the authentication API behaves identically to Firebase's auth library that is accessing, so if you are already familiar with Firebase, you already know how to use it.
 
