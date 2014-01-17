@@ -10,7 +10,7 @@ Install via bower
 
 	bower install fireUser --save
 
-Alternately, clone this repo.
+Or clone this repo. You will also need to include the Angularfire and firebase.js libraries in your application.
 
 ## Setup
 
