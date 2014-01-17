@@ -1,5 +1,5 @@
 #FireUser
-##User management boilerplate for Angular Firebase
+##User management boilerplate for Angularjs & Firebase
 
 FireUser is a user management module for Angular Firebase applications.  Configure FireUser with your firebase URL and data location, drop some of the accompanying directives into your app and you are storing your users' data in your firebase database.
 
