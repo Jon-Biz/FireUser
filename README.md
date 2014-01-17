@@ -8,7 +8,7 @@ FireUser handles user registration, login and databinding, and includes directiv
 ## Installation
 Install via bower
 
-	bower install fireUser --save
+	bower install fireuser --save
 
 Or clone this repo. You will also need to include the Angularfire and firebase.js libraries in your application.
 
