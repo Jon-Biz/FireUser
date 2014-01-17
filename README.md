@@ -10,7 +10,7 @@ Install via bower
 
 	bower install fireuser --save
 
-Or clone this repo. You will also need to include the Angularfire and firebase.js libraries in your application, and if you want to use the accompanying directives as-is, the [fontawesome css icon library](http://fontawesome.io/) (for the github, facebook, twitter logins), and [bootstrap](http://getbootstrap.com/) (for the emailform login).
+Or clone this repo. You will also need to include the [Angularfire and firebase.js](https://www.firebase.com/quickstart/angularjs.html) libraries in your application, and if you want to use the accompanying directives as-is, the [Fontawesome css icon library](http://fontawesome.io/) (for the github, facebook, twitter logins), and [Bootstrap](http://getbootstrap.com/) (for the email login forms).
 
 ## Setup
 
