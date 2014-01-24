@@ -24,7 +24,7 @@ With that out of the way, you need to specify your project's Firebase url, where
 Here's a minimal example of fireUser configuration:
   
 	angular.module('FireUser').value('FireUserConfig',{
-		FBurl:"http://your/firebase/url"
+		url:"http://your/firebase/url"
 		};
 
 All you need to specify is the url. 
@@ -32,7 +32,7 @@ All you need to specify is the url.
 Here's one with all optional configuration parameter:
 
 	angular.module('FireUser').value('FireUserConfig',{
-		FBurl:"http://your/firebase/url",
+		url:"http://your/firebase/url",
 		DataDir: "nameOfRootDataDir",	
 		iconCss: "fontawesome"
 		})
