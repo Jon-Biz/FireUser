@@ -49,7 +49,7 @@ angular.module('fireUser', ['firebase'])
       var FirebaseUrl = new Firebase(FireUserConfig.url + FireUserConfig.datalocation + user.id);
       var _angularFireRef = $firebase(FirebaseUrl);
       $rootScope.userdata = angular.copy(_angularFireRef);
-      
+
       _angularFireRef.$bind($rootScope, 'userdata').then(function(unb) {
         unbind = unb;
       });
@@ -77,11 +77,11 @@ angular.module('fireUser', ['firebase'])
       });
     };
     this.login = function(type,user) {
-      if(type == 'password'){
+      if(type === 'password'){
         auth.$login('password',{
           email: user.email,
           password: user.password
-        });        
+        });
       } else {
         auth.$login(type);
       }
@@ -94,17 +94,17 @@ angular.module('fireUser', ['firebase'])
     };
 
     this.changepassword = function (email, oldPassword, newPassword,callback) {
-      auth.changePassword(email, oldPassword, newPassword, callback)
+      auth.changePassword(email, oldPassword, newPassword, callback);
     };
 
     this.sendPasswordResetEmail =function ( email, callback ) {
-      auth.sendPasswordResetEmail(email,callback)
-    }
+      auth.sendPasswordResetEmail(email,callback);
+    };
 
-  return this;
+    return this;
   }
 ])
-.directive('fireuserlogin', function(FireUserConfig) {
+.directive('fireuserlogin', ['FireUserConfig', function(FireUserConfig) {
     return {
       scope:{
         type:'@'
@@ -115,16 +115,16 @@ angular.module('fireUser', ['firebase'])
         $scope.login = $fireUser.login;
       }],
       link: function ($scope,element,attr,ctrl) {
-        if(FireUserConfig.iconCss="fontawesome"){
-          element.addClass('fa fa-'+attr.type);        
+        if(FireUserConfig.iconCss === 'fontawesome'){
+          element.addClass('fa fa-'+attr.type);
         } else {
-          element.text = "Log In with" + attr.type;
+          element.text = 'Log In with' + attr.type;
         }
       },
-      restrict: 'E' 
+      restrict: 'E'
     };
-  })
-.directive('fireuserlogout', function() {
+  }])
+.directive('fireuserlogout', [function() {
     return {
       scope:{
         type:'@'
@@ -134,10 +134,10 @@ angular.module('fireUser', ['firebase'])
       controller:['$scope','$fireUser',function ($scope, $fireUser) {
         $scope.login = $fireUser.logout;
       }],
-      restrict: 'E' 
+      restrict: 'E'
     };
-  })
-.directive('fireuserloginform',function ($compile,FireUserConfig) {
+  }])
+.directive('fireuserloginform', ['$compile', 'FireUserConfig', function ($compile,FireUserConfig) {
   return {
     scope:{},
     restrict:'E',
@@ -145,7 +145,7 @@ angular.module('fireUser', ['firebase'])
 
       $scope.login = function () {
         $fireUser.login('password',{ email: $scope.email, password: $scope.password });
-      }
+      };
 
     }],
     link:function ($scope,element,attr,ctrl) {
@@ -161,12 +161,12 @@ angular.module('fireUser', ['firebase'])
             '<button id="submitBtn" class="btn" type="submit" value="Log in">Log in</button>'+
           '</div>'+
         '</form>'
-      )
+      );
       $compile(element.contents())($scope);
     }
-  }
-})
-.directive("fireusersignupform",function ($compile,FireUserConfig) {
+  };
+}])
+.directive('fireusersignupform', ['$compile', 'FireUserConfig', function ($compile,FireUserConfig) {
   return {
     scope:{},
     restrict:'E',
@@ -174,7 +174,7 @@ angular.module('fireUser', ['firebase'])
 
       $scope.createUser = function () {
         $fireUser.createUser({ email: $scope.email, password: $scope.password });
-      }
+      };
 
     }],
     link:function ($scope,element,attr,ctrl) {
@@ -187,8 +187,8 @@ angular.module('fireUser', ['firebase'])
         '  <button type="submit" class="btn btn-primary pull-right">Sign Up</button>'+
         '  <span class="error" ng-show="error">{{error}}</span>'+
         '</form>'
-      )
+      );
       $compile(element.contents())($scope);
     }
-  }
-})
+  };
+}]);
