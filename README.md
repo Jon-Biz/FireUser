@@ -37,7 +37,7 @@ Here's one with all optional configuration parameter:
 		iconCss: "fontawesome"
 		})
 
-````FBUrl````: this is your firebase url. 
+````url````: this is your firebase url. 
 
 ````DataDir```` *(optional)*: this is the name of the data object you want to bind to your firebase data, and the name of the firebase data. Defaults to ````userdata````
 
