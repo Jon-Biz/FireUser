@@ -65,7 +65,7 @@ angular.module('fireUser', ['firebase'])
       $rootScope.$broadcast(self.LOGIN_EVENT, user);
     });
 
-    this.creatUser = function (user) {
+    this.createUser = function (user) {
       auth.$createUser(user.email, user.password, function(error, user) {
         if (!error) {
           $rootScope.$broadcast(self.USER_CREATED_EVENT);
