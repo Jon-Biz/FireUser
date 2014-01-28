@@ -148,12 +148,12 @@ module.exports = function (grunt) {
 
     karma: {
       unit: {
-        configFile: './test/karma-unit.conf.js',
+        configFile: 'karma-unit.conf.js',
         singleRun: true,
         autoWatch: false
       },
       unitAuto: {
-        configFile: './test/karma-unit.conf.js',
+        configFile: 'karma-unit.conf.js',
         singleRun: false,
         autoWatch: true
       // },
@@ -189,6 +189,8 @@ module.exports = function (grunt) {
     'connect:test',
     'karma:unit'
   ]);
+
+  grunt.registerTask('default', ['test:unit']);
 
   grunt.registerTask('test:unitAuto', [
     'clean:server',
