@@ -92,6 +92,10 @@ Logs the user out.
 
 User is either a scope or an object containing ````user.email```` or ````user.password````
 
+####SendPasswordResetEmail(emailaddress,callback)
+
+Like the Firebase API it is wrapping, the callback should take two Boolean arguments - ````error```` and ````success````.
+
 ## About
 
 FireUser was created by Jonathan El-Bizri and Austin Brown, two Angular js developers in San Francisco.
