@@ -65,18 +65,25 @@ angular.module('fireUser', ['firebase'])
       $rootScope.$broadcast(self.LOGIN_EVENT, user);
     });
 
-    this.creatUser = function (user) {
-      auth.$createUser(user.email, user.password, function(error, user) {
-        if (!error) {
-          $rootScope.$broadcast(self.USER_CREATED_EVENT);
-          $log.info('User created - User Id: ' + user.id + ', Email: ' + user.email);
-        } else {
-          $rootScope.$broadcast(self.USER_CREATION_ERROR_EVENT);
-          $log.error(error);
-        }
-      });
+    this.createUser = function (user) {
+
+      var userCreationSuccess = function () {
+        $rootScope.$broadcast(self.USER_CREATED_EVENT);
+        $log.info('User created - User Id: ' + user.id + ', Email: ' + user.email);
+      }
+
+      var userCreationError = function (error) {
+        $rootScope.$broadcast(self.USER_CREATION_ERROR_EVENT);
+        $log.error(error);
+      }
+
+      var createUser = auth.$createUser(user.email, user.password).promise
+        .then(userCreationSuccess,userCreationError);
+
+      return createUser;
     };
     this.login = function(type,user) {
+
       if(type === 'password'){
         auth.$login('password',{
           email: user.email,
