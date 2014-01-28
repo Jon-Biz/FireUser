@@ -1,6 +1,6 @@
 {
   "name": "FireUser-test",
-  "version": "0.0.0",
+  "version": "0.1.1",
   "description": "Test suite for FireUser",
   "devDependencies": {
     "connect-livereload": "~0.3",
