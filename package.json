@@ -1,7 +1,7 @@
 {
-  "name": "FireUser-test",
+  "name": "FireUser",
   "version": "0.1.1",
-  "description": "Test suite for FireUser",
+  "description": "A Firebase user management library",
   "devDependencies": {
     "connect-livereload": "~0.3",
     "grunt": "~0.4",
