@@ -33,10 +33,8 @@ xdescribe("the FireUser service", function() {
       angular.module('fireUser')
         .value('FireUserConfig',this.FBconfig)
 
-      var FireUserDefaul = this.FireUserDefaul = {'datalocation':'datalocation'};      
       module('fireUser', function($provide) {
         var firebaseMock = function () {return this;}
-        $provide.constant('FireUserDefault', FireUserDefault);
         $provide.service('$firebase',firebaseMock);
         $provide.service('$firebaseAuth',firebaseAuthMock);
       });
