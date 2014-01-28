@@ -19,7 +19,7 @@ describe("Directive: FireUserLogin", function() {
         return;
       }
     });
-    var firebaseAuthMock = function () {return firebaseAuthStub;};
+    var firebaseAuthStub = function () {return firebaseAuthStub;};
 
     module('fireUser', function($provide) {
 
@@ -29,7 +29,7 @@ describe("Directive: FireUserLogin", function() {
 
       $provide.value('FireUserConfig', { iconCss: 'fontawesome' });
       $provide.service('$firebase',firebaseMock);
-      $provide.service('$firebaseAuth',firebaseAuthMock);
+      $provide.service('$firebaseAuth',firebaseAuthStub);
     });
   });
 

@@ -16,7 +16,7 @@ describe('FirebaseRef Service', function () {
     angular.module('firebase',[])
       // .service('$firebase',firebaseMock)
       // .constant('FireUserDefault',FireUserDefault)
-      // .service('$firebaseAuth',firebaseAuthMock);
+      // .service('$firebaseAuth',firebaseAuthStub);
 
     module('firebase');
 
@@ -24,22 +24,12 @@ describe('FirebaseRef Service', function () {
 
   beforeEach(function() {
 
-    var firebaseStub = this.firebaseStub = sinon.stub()
-    var firebaseMock = function () {
-      return firebaseStub;
-    }
-
-    var FireUserDefault = this.FireUserDefault = {};
-    FireUserDefault.url = 'testing';
-    FireUserDefault.redirectPath = '/testPath';
-
-    var firebaseAuthStub = this.firebaseAuthStub = sinon.stub();
-    var firebaseAuthMock = function () {return firebaseAuthStub;}
+    var firebaseMock = Mocks.setupFirebaseMock(this);
+    var firebaseAuthStub = Mocks.setupFirebaseAuthMock(this);
 
     module('fireUser', function($provide) {
-      $provide.constant('FireUserDefault', FireUserDefault);
       $provide.service('$firebase',firebaseMock);
-      $provide.service('$firebaseAuth',firebaseAuthMock);
+      $provide.service('$firebaseAuth',firebaseAuthStub);
     });
   }); 
 

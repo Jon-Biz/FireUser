@@ -6,27 +6,26 @@ Mocks ={
 
       Mocks.setupAngularFire();
 
-      var firebaseAuthMock = Mocks.setupFirebaseAuthMock(that);
-      var firebaseMock = Mocks.setupFirebaseMock(that);
-
-      var FBOpts = Mocks.setupFBOpts;      
+      firebaseAuthStub = Mocks.setupFirebaseAuthMock(that);
+      firebaseMock = Mocks.setupFirebaseMock(that);
 
       module('fireUser', function($provide) {
         var firebaseMock = function () {return this;}
-        var FBOpts = {};      
-        $provide.constant('FBOpts', FBOpts);
         $provide.service('$firebase',firebaseMock);
-        $provide.service('$firebaseAuth',firebaseAuthMock);
+        $provide.service('$firebaseAuth',firebaseAuthStub);
       });
-
     },
     setupFirebaseJS: function (that) {
       var FirebaseStub = that.FirebaseStub = sinon.stub();
       window.Firebase = function () {return FirebaseStub;};      
     },
     setupFirebaseAuthMock:function (that) {
-      var firebaseAuthStub = that.firebaseAuthStub = sinon.stub();
-      return (function () {return firebaseAuthStub;})
+      // sets up firebaseAuthMock as Mock for methods
+      // sets up firebaseAuthStub as Stub of firebaseAuth service and returns the auth;
+      that.firebaseAuthMock = {};
+      var firebaseAuthStub = that.firebaseAuthStub = sinon.stub().returns(that.firebaseAuthMock);
+
+      return (function () {return firebaseAuthStub;});
     },
     setupFirebaseMock:function (that) {
       return (function () {return this;})
@@ -34,8 +33,5 @@ Mocks ={
     setupAngularFire:function () {
       angular.module('firebase',[])
       module('firebase')
-    },
-    setupFBOpts: function(){
-      return {};
     }
 }

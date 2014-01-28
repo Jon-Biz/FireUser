@@ -35,12 +35,12 @@ describe('FirebaseRef Service', function () {
 
     // FirebaseAuth service
     var firebaseAuthStub = this.firebaseAuthStub = sinon.stub();
-    var firebaseAuthMock = function () {return firebaseAuthStub;}
+    var firebaseAuthStub = function () {return firebaseAuthStub;}
 
     module('fireUser', function($provide) {
       $provide.constant('FireUserDefault', FireUserDefault);
       $provide.service('$firebase',firebaseServiceMock);
-      $provide.service('$firebaseAuth',firebaseAuthMock);
+      $provide.service('$firebaseAuth',firebaseAuthStub);
     });
   });
 

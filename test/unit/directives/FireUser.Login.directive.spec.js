@@ -15,7 +15,7 @@ describe("Directive: FireUserLoginForm", function() {
     };
 
     var firebaseAuthStub = this.firebaseAuthStub = sinon.stub();
-    var firebaseAuthMock = function () {return firebaseAuthStub;}
+    var firebaseAuthStub = function () {return firebaseAuthStub;}
 
     module('fireUser', function($provide) {
 
@@ -26,7 +26,7 @@ describe("Directive: FireUserLoginForm", function() {
       var FBOpts = {};      
       $provide.constant('FBOpts', FBOpts);
       $provide.service('$firebase',firebaseMock);
-      $provide.service('$firebaseAuth',firebaseAuthMock);
+      $provide.service('$firebaseAuth',firebaseAuthStub);
     });
   });
 
