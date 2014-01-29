@@ -132,7 +132,7 @@ angular.module('fireUser', ['firebase'])
       replace: true,
       template: '<div ng-click="logout()">Logout</div>',
       controller:['$scope','$fireUser',function ($scope, $fireUser) {
-        $scope.login = $fireUser.logout;
+        $scope.logout = $fireUser.logout;
       }],
       restrict: 'E'
     };
