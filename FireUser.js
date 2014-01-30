@@ -157,9 +157,8 @@ angular.module('fireUser', ['firebase'])
           '<formgroup>'+
             'Password <input class="form-control" type="text" name="password" ng-model="password" required/>'+
           '</formgroup>'+
-          '<div class="pull-right">'+
-            '<button id="submitBtn" class="btn" type="submit" value="Log in">Log in</button>'+
-          '</div>'+
+          '<br />'+
+          '<button id="submitBtn" class="btn btn-primary pull-right" type="submit" value="login">Log in</button>'+
         '</form>'
       );
       $compile(element.contents())($scope);
@@ -180,11 +179,14 @@ angular.module('fireUser', ['firebase'])
     link:function ($scope,element,attr,ctrl) {
       element.html(
         '<form name="signupForm" ng-submit="createUser()">'+
-        '  <forminput title="Name" type="text" />'+
-        '  <forminput title="Email" type="email" />'+
-        '  <forminput title="Password" type="password" />'+
+          '<formgroup>'+
+            'Email <input class="form-control" type="email" name="email" ng-model="email" required/>'+
+          '</formgroup>'+
+          '<formgroup>'+
+            'Password <input class="form-control" type="text" name="password" ng-model="password" required/>'+
+          '</formgroup>'+
         '  <br />'+
-        '  <button type="submit" class="btn btn-primary pull-right">Sign Up</button>'+
+        '  <button type="submit" class="btn btn-primary pull-right" value="creatUser">Sign Up</button>'+
         '  <span class="error" ng-show="error">{{error}}</span>'+
         '</form>'
       );
