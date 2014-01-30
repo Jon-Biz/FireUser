@@ -15,8 +15,8 @@ angular.module('fireUser', ['firebase'])
 .run(['FireUserDefault','FireUserConfig',function (FireUserDefault,FireUserConfig) {
   FireUserConfig = angular.extend(FireUserDefault,FireUserConfig);
 }])
-.service('$fireUser', ['$firebaseAuth', '$firebase', '$rootScope', '$location', 'FireUserConfig','$log',
-  function ($firebaseAuth, $firebase, $rootScope, $location, FireUserConfig, $log) {
+.service('$fireUser', ['$firebaseAuth', '$firebase', '$rootScope', 'FireUserConfig','$log',
+  function ($firebaseAuth, $firebase, $rootScope, FireUserConfig, $log) {
 
     // Possible events broadcasted by this service
     this.USER_CREATED_EVENT = 'fireuser:user_created';
@@ -45,7 +45,6 @@ angular.module('fireUser', ['firebase'])
 
     $rootScope.$on('$firebaseAuth:login', function(evt, user) {
 
-      $location.path('/');
       var FirebaseUrl = new Firebase(FireUserConfig.url + FireUserConfig.datalocation + user.id);
       var _angularFireRef = $firebase(FirebaseUrl);
       $rootScope.userdata = angular.copy(_angularFireRef);
@@ -89,7 +88,6 @@ angular.module('fireUser', ['firebase'])
 
     this.logout = function() {
       auth.$logout();
-      $location.path('/login');
       unbind();
     };
 
