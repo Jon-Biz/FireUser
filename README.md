@@ -23,7 +23,7 @@ With that out of the way, you need to specify your project's Firebase url, where
 
 Here's a minimal example of fireUser configuration:
   
-	angular.module('FireUser').value('FireUserConfig',{
+	angular.module('fireUser').value('FireUserConfig',{
 		url:"http://your/firebase/url"
 		};
 
@@ -31,7 +31,7 @@ All you need to specify is the url.
 
 Here's one with all optional configuration parameter:
 
-	angular.module('FireUser').value('FireUserConfig',{
+	angular.module('fireUser').value('FireUserConfig',{
 		url:"http://your/firebase/url",
 		DataDir: "nameOfRootDataDir",	
 		iconCss: "fontawesome"
@@ -91,6 +91,10 @@ Logs the user out.
 ####NewUser(user)
 
 User is either a scope or an object containing ````user.email```` or ````user.password````
+
+####SendPasswordResetEmail(emailaddress,callback)
+
+Like the Firebase API it is wrapping, the callback should take two Boolean arguments - ````error```` and ````success````.
 
 ## About
 
