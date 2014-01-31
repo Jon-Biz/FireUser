@@ -11,12 +11,15 @@ angular.module('fireUser', ['firebase'])
   datalocation:'/userdata/',
   iconCss:'fontawesome'
 })
-.value('FireUserConfig',{})
-.run(['FireUserDefault','FireUserConfig',function (FireUserDefault,FireUserConfig) {
+.service('FireUserValues',['FireUserDefault','FireUserConfig',function (FireUserDefault,FireUserConfig) {
   FireUserConfig = angular.extend(FireUserDefault,FireUserConfig);
+  return FireUserConfig;
 }])
-.service('$fireUser', ['$firebaseAuth', '$firebase', '$rootScope', 'FireUserConfig','$log',
-  function ($firebaseAuth, $firebase, $rootScope, FireUserConfig, $log) {
+.service('$fireUser', ['$firebaseAuth', '$firebase', '$rootScope', 'FireUserValues','$log',
+  function ($firebaseAuth, $firebase, $rootScope, FireUserValues, $log) {
+
+    // create data scope 
+    $rootScope.FireUser = {}
 
     // Possible events broadcasted by this service
     this.USER_CREATED_EVENT = 'fireuser:user_created';
@@ -29,7 +32,7 @@ angular.module('fireUser', ['firebase'])
 
 
     // kickoff the authentication call (fires events $firebaseAuth:* events)
-    var auth = $firebaseAuth(new Firebase(FireUserConfig.url), {'path': FireUserConfig.redirectPath});
+    var auth = $firebaseAuth(new Firebase(FireUserValues.url), {'path': FireUserValues.redirectPath});
     var self = this;
     var unbind = null;
     var _angularFireRef = null;
@@ -45,19 +48,20 @@ angular.module('fireUser', ['firebase'])
 
     $rootScope.$on('$firebaseAuth:login', function(evt, user) {
 
-      var FirebaseUrl = new Firebase(FireUserConfig.url + FireUserConfig.datalocation + user.id);
-      var _angularFireRef = $firebase(FirebaseUrl);
-      $rootScope.userdata = angular.copy(_angularFireRef);
+      var FirebaseUrl = new Firebase(FireUserValues.url + FireUserValues.datalocation + '/' + user.id);
 
-      _angularFireRef.$bind($rootScope, 'userdata').then(function(unb) {
+      var _angularFireRef = $firebase(FirebaseUrl);
+
+      var datalocation = FireUserValues.datalocation+'.'+FireUserValues.userdata;
+      _angularFireRef.$bind($rootScope, datalocation).then(function(unb) {
         unbind = unb;
       });
 
-      $rootScope.userdata.$on('loaded', function(data) {
+      _angularFireRef.$on('loaded', function(data) {
         $rootScope.$broadcast(self.USER_DATA_LOADED_EVENT, data);
       });
 
-      $rootScope.userdata.$on('change', function(data) {
+      _angularFireRef.$on('change', function(data) {
         $rootScope.$broadcast(self.USER_DATA_CHANGED_EVENT, data);
       });
 
@@ -75,6 +79,7 @@ angular.module('fireUser', ['firebase'])
         }
       });
     };
+
     this.login = function(type,user) {
       if(type === 'password'){
         auth.$login('password',{
@@ -102,7 +107,7 @@ angular.module('fireUser', ['firebase'])
     return this;
   }
 ])
-.directive('fireuserlogin', ['FireUserConfig', function(FireUserConfig) {
+.directive('fireuserlogin', ['FireUserValues', function(FireUserValues) {
     return {
       scope:{
         type:'@'
@@ -113,7 +118,7 @@ angular.module('fireUser', ['firebase'])
         $scope.login = $fireUser.login;
       }],
       link: function ($scope,element,attr,ctrl) {
-        if(FireUserConfig.iconCss === 'fontawesome'){
+        if(FireUserValues.iconCss === 'fontawesome'){
           element.addClass('fa fa-'+attr.type);
         } else {
           element.text = 'Log In with' + attr.type;
@@ -135,7 +140,7 @@ angular.module('fireUser', ['firebase'])
       restrict: 'E'
     };
   }])
-.directive('fireuserloginform', ['$compile', 'FireUserConfig', function ($compile,FireUserConfig) {
+.directive('fireuserloginform', ['$compile', 'FireUserValues', function ($compile,FireUserValues) {
   return {
     scope:{},
     restrict:'E',
@@ -163,7 +168,7 @@ angular.module('fireUser', ['firebase'])
     }
   };
 }])
-.directive('fireusersignupform', ['$compile', 'FireUserConfig', function ($compile,FireUserConfig) {
+.directive('fireusersignupform', ['$compile', 'FireUserValues', function ($compile,FireUserValues) {
   return {
     scope:{},
     restrict:'E',
