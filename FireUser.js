@@ -9,7 +9,7 @@ angular.module('fireUser', ['firebase'])
 .constant('FireUserDefault', {
   redirectPath:'/',
   datalocation:'data',
-  userdata:'user'
+  userdata:'user',
   iconCss:'fontawesome'
 })
 .service('FireUserValues',['FireUserDefault','FireUserConfig',function (FireUserDefault,FireUserConfig) {
