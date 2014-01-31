@@ -24,26 +24,36 @@ With that out of the way, you need to specify your project's Firebase url, where
 Here's a minimal example of fireUser configuration:
   
 	angular.module('fireUser').value('FireUserConfig',{
-		url:"http://your/firebase/url"
+		url:"http://your/firebase/url/"
 		};
 
-All you need to specify is the url. 
+All you need to specify is the Firebase url. 
 
 Here's one with all optional configuration parameter:
 
 	angular.module('fireUser').value('FireUserConfig',{
 		url:"http://your/firebase/url",
+		redirectPath:'/',
 		DataDir: "nameOfRootDataDir",	
+		Userdata: "nameofuserdatalocation",
 		iconCss: "fontawesome"
 		})
 
+
 ````url````: this is your firebase url. 
 
-````DataDir```` *(optional)*: this is the name of the data object you want to bind to your firebase data, and the name of the firebase data. Defaults to ````userdata````
+````DataDir```` *(optional)*: this is the name of the data object you want to bind to your firebase data, and the name of the firebase data. Defaults to ````data````
+
+````Userdata```` *(optional)*: this is where the user data should be stored within your data directory. It defaults to ````user````. 
+
+So, if both are left unspecified, user's data is made available from ````$rootScope.data.user```` and passes up through the scope inheritance chain.
+
+(These two parameters are required due to angular's $scope inheritance and dot notation.)
+
 
 ````iconCss````: 'fontawesome'
 
-iconCss specifies the icon font to use with the third party provider logins. Currently fontawesome is supported, with more to follow.
+iconCss specifies the icon font to use with the third party provider logins. Currently fontawesome is supported.
 
 ## Directives
 
