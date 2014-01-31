@@ -7,8 +7,9 @@
 
 angular.module('fireUser', ['firebase'])
 .constant('FireUserDefault', {
-  redirectPath:'/login',
-  datalocation:'/userdata/',
+  redirectPath:'/',
+  datalocation:'data',
+  userdata:'user'
   iconCss:'fontawesome'
 })
 .service('FireUserValues',['FireUserDefault','FireUserConfig',function (FireUserDefault,FireUserConfig) {
