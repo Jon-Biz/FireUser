@@ -93,8 +93,8 @@ angular.module('fireUser', ['firebase'])
     };
 
     this.logout = function() {
-      auth.$logout();
       unbind();
+      auth.$logout();
     };
 
     this.changepassword = function (email, oldPassword, newPassword,callback) {
