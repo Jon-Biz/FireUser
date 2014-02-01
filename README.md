@@ -17,7 +17,7 @@ Or clone this repo. You will also need to include the [Angularfire and firebase.
 ### FireUser options constant
 
 Like any angular module, you will need to add a reference to fireUser.
-js in your index.html, and specify module ````FireUser```` in your application's dependencies.
+js in your index.html, and specify module ````fireUser```` in your application's dependencies.
 
 With that out of the way, you need to specify your project's Firebase url, where you want to place the data, and (optionally) third party secrets for facebook API. FireUser takes an angular Value service called ````FireUserConfig```` containing these options. 
 
