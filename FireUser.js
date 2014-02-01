@@ -20,7 +20,7 @@ angular.module('fireUser', ['firebase'])
   function ($firebaseAuth, $firebase, $rootScope, FireUserValues, $log) {
 
     // create data scope 
-    $rootScope.FireUser = {}
+    $rootScope[FireUserValues.datalocation] = {}
 
     // Possible events broadcasted by this service
     this.USER_CREATED_EVENT = 'fireuser:user_created';
