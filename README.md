@@ -5,6 +5,12 @@ FireUser is a user management module for Angular Firebase applications.  Configu
 
 FireUser handles user registration, login and databinding, and includes directives for user management, Firebase's email based login and third party login provider methods (ie - Github, Facebook, Twitter). You can use these directives to add functionality quickly, or access the API directly with your own - the authentication API behaves identically to Firebase's auth library that is accessing, so if you are already familiar with Firebase, you already know how to use it.
 
+There is a simple demo here:
+
+http://glaring-fire-5689.firebaseapp.com/
+
+You can log in with github, twitter, or create an account with an email address and password. After login a text field appears, that persists between logins.
+
 ## Installation
 Install via bower
 
