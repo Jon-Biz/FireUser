@@ -171,17 +171,18 @@ angular.module('fireUser', ['firebase'])
     }
   };
 }])
-.directive('fireusersignupform', ['$compile', 'FireUserValues', function ($compile,FireUserValues) {
-  return {
-    scope:{},
-    restrict:'E',
-    controller:['$scope', '$fireUser', function ($scope, $fireUser) {
+.controller('fireusersignupformCTRL',['$scope', '$fireUser', function ($scope, $fireUser) {
 
       $scope.createUser = function () {
         $fireUser.createUser({ email: $scope.email, password: $scope.password });
       };
 
-    }],
+}],
+.directive('fireusersignupform', ['$compile', 'FireUserValues', function ($compile,FireUserValues) {
+  return {
+    scope:{},
+    restrict:'E',
+    controller:'fireusersignupformCTRL',
     link:function ($scope,element,attr,ctrl) {
       element.html(
         '<form name="signupForm" ng-submit="createUser()">'+
