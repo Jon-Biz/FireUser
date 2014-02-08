@@ -129,7 +129,7 @@ angular.module('fireUser', ['firebase'])
         if(FireUserValues.iconCss === 'fontawesome'){
           element.addClass('fa fa-'+attr.type);
         } else {
-          element.text = 'Log In with' + attr.type;
+          element.text = 'Log In with ' + attr.type;
         }
       },
       restrict: 'E'
