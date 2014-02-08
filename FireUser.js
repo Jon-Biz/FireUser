@@ -76,7 +76,7 @@ angular.module('fireUser', ['firebase'])
         $log.error(error);
       }
 
-      var createUser = auth.$createUser(user.email, user.password).promise
+      var createUser = auth.$createUser(user.email, user.password)
         .then(userCreationSuccess,userCreationError);
 
       return createUser;
@@ -172,12 +172,10 @@ angular.module('fireUser', ['firebase'])
   };
 }])
 .controller('fireusersignupformCTRL',['$scope', '$fireUser', function ($scope, $fireUser) {
-
       $scope.createUser = function () {
         $fireUser.createUser({ email: $scope.email, password: $scope.password });
       };
-
-}],
+}])
 .directive('fireusersignupform', ['$compile', 'FireUserValues', function ($compile,FireUserValues) {
   return {
     scope:{},
@@ -200,4 +198,4 @@ angular.module('fireUser', ['firebase'])
       $compile(element.contents())($scope);
     }
   };
-}]);
+}])
