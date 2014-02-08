@@ -110,6 +110,9 @@ angular.module('fireUser', ['firebase'])
     return this;
   }
 ])
+.controller('fireuserloginCTRL',['$scope','$fireUser',function ($scope, $fireUser) {
+  $scope.login = $fireUser.login;
+  }])
 .directive('fireuserlogin', ['FireUserValues', function(FireUserValues) {
     return {
       scope:{
@@ -117,9 +120,7 @@ angular.module('fireUser', ['firebase'])
       },
       replace: true,
       template: '<i ng-click="login(type)"></i>',
-      controller:['$scope','$fireUser',function ($scope, $fireUser) {
-        $scope.login = $fireUser.login;
-      }],
+      controller:'fireuserloginCTRL',
       link: function ($scope,element,attr,ctrl) {
         if(FireUserValues.iconCss === 'fontawesome'){
           element.addClass('fa fa-'+attr.type);
@@ -130,6 +131,9 @@ angular.module('fireUser', ['firebase'])
       restrict: 'E'
     };
   }])
+.controller('fireuserlogoutCTRL',['$scope','$fireUser',function ($scope, $fireUser) {
+  $scope.logout = $fireUser.logout;
+  }])
 .directive('fireuserlogout', [function() {
     return {
       scope:{
@@ -137,23 +141,22 @@ angular.module('fireUser', ['firebase'])
       },
       replace: true,
       template: '<div ng-click="logout()">Logout</div>',
-      controller:['$scope','$fireUser',function ($scope, $fireUser) {
-        $scope.logout = $fireUser.logout;
-      }],
+      controller:'fireuserlogoutCTRL',
       restrict: 'E'
     };
   }])
-.directive('fireuserloginform', ['$compile', 'FireUserValues', function ($compile,FireUserValues) {
-  return {
-    scope:{},
-    restrict:'E',
-    controller:['$scope', '$fireUser', function ($scope, $fireUser) {
+.controller('fireuserloginformCTRL',['$scope', '$fireUser', function ($scope, $fireUser) {
 
       $scope.login = function () {
         $fireUser.login('password',{ email: $scope.email, password: $scope.password });
       };
 
-    }],
+    }])
+.directive('fireuserloginform', ['$compile', 'FireUserValues', function ($compile,FireUserValues) {
+  return {
+    scope:{},
+    restrict:'E',
+    controller:'fireuserloginformCTRL',
     link:function ($scope,element,attr,ctrl) {
       element.html(
         '<form id="loginForm" name="loginForm" ng-submit="login()">'+
@@ -172,9 +175,11 @@ angular.module('fireUser', ['firebase'])
   };
 }])
 .controller('fireusersignupformCTRL',['$scope', '$fireUser', function ($scope, $fireUser) {
+
       $scope.createUser = function () {
         $fireUser.createUser({ email: $scope.email, password: $scope.password });
       };
+
 }])
 .directive('fireusersignupform', ['$compile', 'FireUserValues', function ($compile,FireUserValues) {
   return {
