@@ -5,6 +5,12 @@ FireUser is a user management module for Angular Firebase applications.  Configu
 
 FireUser handles user registration, login and databinding, and includes directives for user management, Firebase's email based login and third party login provider methods (ie - Github, Facebook, Twitter). You can use these directives to add functionality quickly, or access the API directly with your own - the authentication API behaves identically to Firebase's auth library that is accessing, so if you are already familiar with Firebase, you already know how to use it.
 
+There is a simple demo here:
+
+http://glaring-fire-5689.firebaseapp.com/
+
+You can log in with github, twitter, or create an account with an email address and password. After login a text field appears, that persists between logins.
+
 ## Installation
 Install via bower
 
@@ -17,33 +23,43 @@ Or clone this repo. You will also need to include the [Angularfire and firebase.
 ### FireUser options constant
 
 Like any angular module, you will need to add a reference to fireUser.
-js in your index.html, and specify module ````FireUser```` in your application's dependencies.
+js in your index.html, and specify module ````fireUser```` in your application's dependencies.
 
 With that out of the way, you need to specify your project's Firebase url, where you want to place the data, and (optionally) third party secrets for facebook API. FireUser takes an angular Value service called ````FireUserConfig```` containing these options. 
 
 Here's a minimal example of fireUser configuration:
   
-	angular.module('FireUser').value('FireUserConfig',{
-		url:"http://your/firebase/url"
+	angular.module('fireUser').value('FireUserConfig',{
+		url:"http://your/firebase/url/"
 		};
 
-All you need to specify is the url. 
+All you need to specify is the Firebase url. 
 
 Here's one with all optional configuration parameter:
 
-	angular.module('FireUser').value('FireUserConfig',{
+	angular.module('fireUser').value('FireUserConfig',{
 		url:"http://your/firebase/url",
+		redirectPath:'/',
 		DataDir: "nameOfRootDataDir",	
+		Userdata: "nameofuserdatalocation",
 		iconCss: "fontawesome"
 		})
 
+
 ````url````: this is your firebase url. 
 
-````DataDir```` *(optional)*: this is the name of the data object you want to bind to your firebase data, and the name of the firebase data. Defaults to ````userdata````
+````DataDir```` *(optional)*: this is the name of the data object you want to bind to your firebase data, and the name of the firebase data. Defaults to ````data````
+
+````Userdata```` *(optional)*: this is where the user data should be stored within your data directory. It defaults to ````user````. 
+
+So, if both are left unspecified, user's data is made available from ````$rootScope.data.user```` and passes up through the scope inheritance chain.
+
+(These two parameters are required due to angular's $scope inheritance and dot notation.)
+
 
 ````iconCss````: 'fontawesome'
 
-iconCss specifies the icon font to use with the third party provider logins. Currently fontawesome is supported, with more to follow.
+iconCss specifies the icon font to use with the third party provider logins. Currently fontawesome is supported.
 
 ## Directives
 
@@ -91,6 +107,10 @@ Logs the user out.
 ####NewUser(user)
 
 User is either a scope or an object containing ````user.email```` or ````user.password````
+
+####SendPasswordResetEmail(emailaddress,callback)
+
+Like the Firebase API it is wrapping, the callback should take two Boolean arguments - ````error```` and ````success````.
 
 ## About
 

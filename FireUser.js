@@ -7,16 +7,20 @@
 
 angular.module('fireUser', ['firebase'])
 .constant('FireUserDefault', {
-  redirectPath:'/login',
-  datalocation:'/userdata/',
+  redirectPath:'/',
+  datalocation:'data',
+  userdata:'user',
   iconCss:'fontawesome'
 })
-.value('FireUserConfig',{})
-.run(['FireUserDefault','FireUserConfig',function (FireUserDefault,FireUserConfig) {
+.service('FireUserValues',['FireUserDefault','FireUserConfig',function (FireUserDefault,FireUserConfig) {
   FireUserConfig = angular.extend(FireUserDefault,FireUserConfig);
+  return FireUserConfig;
 }])
-.service('$fireUser', ['$firebaseAuth', '$firebase', '$rootScope', '$location', 'FireUserConfig','$log',
-  function ($firebaseAuth, $firebase, $rootScope, $location, FireUserConfig, $log) {
+.service('$fireUser', ['$firebaseAuth', '$firebase', '$rootScope', 'FireUserValues','$log',
+  function ($firebaseAuth, $firebase, $rootScope, FireUserValues, $log) {
+
+    // create data scope 
+    $rootScope[FireUserValues.datalocation] = {}
 
     // Possible events broadcasted by this service
     this.USER_CREATED_EVENT = 'fireuser:user_created';
@@ -29,7 +33,7 @@ angular.module('fireUser', ['firebase'])
 
 
     // kickoff the authentication call (fires events $firebaseAuth:* events)
-    var auth = $firebaseAuth(new Firebase(FireUserConfig.url), {'path': FireUserConfig.redirectPath});
+    var auth = $firebaseAuth(new Firebase(FireUserValues.url), {'path': FireUserValues.redirectPath});
     var self = this;
     var unbind = null;
     var _angularFireRef = null;
@@ -45,20 +49,20 @@ angular.module('fireUser', ['firebase'])
 
     $rootScope.$on('$firebaseAuth:login', function(evt, user) {
 
-      $location.path('/');
-      var FirebaseUrl = new Firebase(FireUserConfig.url + FireUserConfig.datalocation + user.id);
-      var _angularFireRef = $firebase(FirebaseUrl);
-      $rootScope.userdata = angular.copy(_angularFireRef);
+      var FirebaseUrl = new Firebase(FireUserValues.url + FireUserValues.datalocation + '/' + user.id);
 
-      _angularFireRef.$bind($rootScope, 'userdata').then(function(unb) {
+      var _angularFireRef = $firebase(FirebaseUrl);
+
+      var datalocation = FireUserValues.datalocation+'.'+FireUserValues.userdata;
+      _angularFireRef.$bind($rootScope, datalocation).then(function(unb) {
         unbind = unb;
       });
 
-      $rootScope.userdata.$on('loaded', function(data) {
+      _angularFireRef.$on('loaded', function(data) {
         $rootScope.$broadcast(self.USER_DATA_LOADED_EVENT, data);
       });
 
-      $rootScope.userdata.$on('change', function(data) {
+      _angularFireRef.$on('change', function(data) {
         $rootScope.$broadcast(self.USER_DATA_CHANGED_EVENT, data);
       });
 
@@ -82,6 +86,7 @@ angular.module('fireUser', ['firebase'])
 
       return createUser;
     };
+
     this.login = function(type,user) {
 
       if(type === 'password'){
@@ -95,9 +100,8 @@ angular.module('fireUser', ['firebase'])
     };
 
     this.logout = function() {
-      auth.$logout();
-      $location.path('/login');
       unbind();
+      auth.$logout();
     };
 
     this.changepassword = function (email, oldPassword, newPassword,callback) {
@@ -111,7 +115,7 @@ angular.module('fireUser', ['firebase'])
     return this;
   }
 ])
-.directive('fireuserlogin', ['FireUserConfig', function(FireUserConfig) {
+.directive('fireuserlogin', ['FireUserValues', function(FireUserValues) {
     return {
       scope:{
         type:'@'
@@ -122,7 +126,7 @@ angular.module('fireUser', ['firebase'])
         $scope.login = $fireUser.login;
       }],
       link: function ($scope,element,attr,ctrl) {
-        if(FireUserConfig.iconCss === 'fontawesome'){
+        if(FireUserValues.iconCss === 'fontawesome'){
           element.addClass('fa fa-'+attr.type);
         } else {
           element.text = 'Log In with' + attr.type;
@@ -139,12 +143,12 @@ angular.module('fireUser', ['firebase'])
       replace: true,
       template: '<div ng-click="logout()">Logout</div>',
       controller:['$scope','$fireUser',function ($scope, $fireUser) {
-        $scope.login = $fireUser.logout;
+        $scope.logout = $fireUser.logout;
       }],
       restrict: 'E'
     };
   }])
-.directive('fireuserloginform', ['$compile', 'FireUserConfig', function ($compile,FireUserConfig) {
+.directive('fireuserloginform', ['$compile', 'FireUserValues', function ($compile,FireUserValues) {
   return {
     scope:{},
     restrict:'E',
@@ -164,16 +168,15 @@ angular.module('fireUser', ['firebase'])
           '<formgroup>'+
             'Password <input class="form-control" type="text" name="password" ng-model="password" required/>'+
           '</formgroup>'+
-          '<div class="pull-right">'+
-            '<button id="submitBtn" class="btn" type="submit" value="Log in">Log in</button>'+
-          '</div>'+
+          '<br />'+
+          '<button id="submitBtn" class="btn btn-primary pull-right" type="submit" value="login">Log in</button>'+
         '</form>'
       );
       $compile(element.contents())($scope);
     }
   };
 }])
-.directive('fireusersignupform', ['$compile', 'FireUserConfig', function ($compile,FireUserConfig) {
+.directive('fireusersignupform', ['$compile', 'FireUserValues', function ($compile,FireUserValues) {
   return {
     scope:{},
     restrict:'E',
@@ -187,11 +190,14 @@ angular.module('fireUser', ['firebase'])
     link:function ($scope,element,attr,ctrl) {
       element.html(
         '<form name="signupForm" ng-submit="createUser()">'+
-        '  <forminput title="Name" type="text" />'+
-        '  <forminput title="Email" type="email" />'+
-        '  <forminput title="Password" type="password" />'+
+          '<formgroup>'+
+            'Email <input class="form-control" type="email" name="email" ng-model="email" required/>'+
+          '</formgroup>'+
+          '<formgroup>'+
+            'Password <input class="form-control" type="text" name="password" ng-model="password" required/>'+
+          '</formgroup>'+
         '  <br />'+
-        '  <button type="submit" class="btn btn-primary pull-right">Sign Up</button>'+
+        '  <button type="submit" class="btn btn-primary pull-right" value="creatUser">Sign Up</button>'+
         '  <span class="error" ng-show="error">{{error}}</span>'+
         '</form>'
       );
