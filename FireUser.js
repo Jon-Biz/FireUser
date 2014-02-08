@@ -1,10 +1,5 @@
 'use strict';
 
-// TODO: allow users to set:
-//  - redirect URL on login success
-//  - $rootScope var that stores data
-//  - FBURL
-
 angular.module('fireUser', ['firebase'])
 .constant('FireUserDefault', {
   redirectPath:'/',
