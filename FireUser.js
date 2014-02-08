@@ -16,8 +16,8 @@ angular.module('fireUser', ['firebase'])
   FireUserConfig = angular.extend(FireUserDefault,FireUserConfig);
   return FireUserConfig;
 }])
-.service('$fireUser', ['$firebaseAuth', '$firebase', '$rootScope', 'FireUserValues','$log',
-  function ($firebaseAuth, $firebase, $rootScope, FireUserValues, $log) {
+.service('$fireUser', ['$firebaseSimpleLogin', '$firebase', '$rootScope', 'FireUserValues','$log',
+  function ($firebaseSimpleLogin, $firebase, $rootScope, FireUserValues, $log) {
 
     // create data scope 
     $rootScope[FireUserValues.datalocation] = {}
@@ -33,21 +33,21 @@ angular.module('fireUser', ['firebase'])
 
 
     // kickoff the authentication call (fires events $firebaseAuth:* events)
-    var auth = $firebaseAuth(new Firebase(FireUserValues.url), {'path': FireUserValues.redirectPath});
+    var auth = $firebaseSimpleLogin(new Firebase(FireUserValues.url), {'path': FireUserValues.redirectPath});
     var self = this;
     var unbind = null;
     var _angularFireRef = null;
 
-    $rootScope.$on('$firebaseAuth:logout', function() {
+    $rootScope.$on('$firebaseSimpleLogin:logout', function() {
       $rootScope.$broadcast(self.LOGOUT_EVENT);
     });
 
-    $rootScope.$on('$firebaseAuth:error', function(err) {
+    $rootScope.$on('$firebaseSimpleLogin:error', function(err) {
       $rootScope.$broadcast(self.LOGIN_ERROR_EVENT);
       $log.info('There was an error during authentication.', err);
     });
 
-    $rootScope.$on('$firebaseAuth:login', function(evt, user) {
+    $rootScope.$on('$firebaseSimpleLogin:login', function(evt, user) {
 
       var FirebaseUrl = new Firebase(FireUserValues.url + FireUserValues.datalocation + '/' + user.id);
 
