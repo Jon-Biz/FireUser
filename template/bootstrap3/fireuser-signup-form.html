@@ -1,0 +1,7 @@
+<form name="signupForm" ng-submit="createUser()">
+  <formgroup>Email<input class="form-control" type="email" name="email" ng-model="email" required/></formgroup>
+  <formgroup>Password<input class="form-control" type="text" name="password" ng-model="password" required/></formgroup>
+  <br />
+  <button type="submit" class="btn btn-primary pull-right" value="creatUser">Sign Up</button>
+  <span class="error" ng-show="error">{{error}}</span>
+</form>

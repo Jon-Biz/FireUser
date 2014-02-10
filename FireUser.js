@@ -5,7 +5,8 @@ angular.module('fireUser', ['firebase'])
   redirectPath:'/',
   datalocation:'data',
   userdata:'user',
-  iconCss:'fontawesome'
+  iconCss:'fontawesome',
+  templatePath:'template/bootstrap3'
 })
 .service('FireUserValues',['FireUserDefault','FireUserConfig',function (FireUserDefault,FireUserConfig) {
   FireUserConfig = angular.extend(FireUserDefault,FireUserConfig);
@@ -119,7 +120,7 @@ angular.module('fireUser', ['firebase'])
         type:'@'
       },
       replace: true,
-      template: '<i ng-click="login(type)"></i>',
+      templateUrl: FireUserValues.templatePath + '/fireuser-login.html',
       controller:'fireuserloginCTRL',
       link: function ($scope,element,attr,ctrl) {
         if(FireUserValues.iconCss === 'fontawesome'){
@@ -140,7 +141,7 @@ angular.module('fireUser', ['firebase'])
         type:'@'
       },
       replace: true,
-      template: '<div ng-click="logout()">Logout</div>',
+      templateUrl: FireUserValues.templatePath + '/fireuser-logout.html',
       controller:'fireuserlogoutCTRL',
       restrict: 'E'
     };
@@ -152,25 +153,17 @@ angular.module('fireUser', ['firebase'])
       };
 
     }])
-.directive('fireuserloginform', ['$compile', 'FireUserValues', function ($compile,FireUserValues) {
+.directive('fireuserloginform', ['$compile', '$http', '$templateCache', 'FireUserValues', function ($compile, $http, $templateCache, FireUserValues) {
   return {
     scope:{},
     restrict:'E',
     controller:'fireuserloginformCTRL',
     link:function ($scope,element,attr,ctrl) {
-      element.html(
-        '<form id="loginForm" name="loginForm" ng-submit="login()">'+
-          '<formgroup>'+
-            'Email <input class="form-control" type="email" name="email" ng-model="email" required/>'+
-          '</formgroup>'+
-          '<formgroup>'+
-            'Password <input class="form-control" type="text" name="password" ng-model="password" required/>'+
-          '</formgroup>'+
-          '<br />'+
-          '<button id="submitBtn" class="btn btn-primary pull-right" type="submit" value="login">Log in</button>'+
-        '</form>'
-      );
-      $compile(element.contents())($scope);
+      var tplUrl = FireUserValues.templatePath + '/fireuser-login-form.html';
+
+       $http.get(tplUrl, {cache: $templateCache}).success(function(tplContent){
+           element.replaceWith($compile(tplContent.trim())($scope));
+        });
     }
   };
 }])
@@ -181,26 +174,17 @@ angular.module('fireUser', ['firebase'])
       };
 
 }])
-.directive('fireusersignupform', ['$compile', 'FireUserValues', function ($compile,FireUserValues) {
+.directive('fireusersignupform', ['$compile', '$http', '$templateCache', 'FireUserValues', function ($compile, $http, $templateCache, FireUserValues) {
   return {
     scope:{},
     restrict:'E',
     controller:'fireusersignupformCTRL',
     link:function ($scope,element,attr,ctrl) {
-      element.html(
-        '<form name="signupForm" ng-submit="createUser()">'+
-          '<formgroup>'+
-            'Email <input class="form-control" type="email" name="email" ng-model="email" required/>'+
-          '</formgroup>'+
-          '<formgroup>'+
-            'Password <input class="form-control" type="text" name="password" ng-model="password" required/>'+
-          '</formgroup>'+
-        '  <br />'+
-        '  <button type="submit" class="btn btn-primary pull-right" value="creatUser">Sign Up</button>'+
-        '  <span class="error" ng-show="error">{{error}}</span>'+
-        '</form>'
-      );
-      $compile(element.contents())($scope);
+      var tplUrl =  FireUserValues.templatePath + '/fireuser-signup-form.html';
+
+       $http.get(tplUrl, {cache: $templateCache}).success(function(tplContent){
+           element.replaceWith($compile(tplContent.trim())($scope));
+        });
     }
   };
 }])
