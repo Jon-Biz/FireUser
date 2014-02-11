@@ -5,15 +5,17 @@ angular.module('fireUser', ['firebase'])
   redirectPath:'/',
   datalocation:'data',
   userdata:'user',
-  iconCss:'fontawesome'
+  iconCss:'fontawesome',
+  route: true,
+  routeaccess: 'publicAccess'
 })
 .run(['$rootScope', '$location', '$fireUser', '$route','FireUserValues', 
 function($rootScope, $location, $fireUser, $route, FireUserValues) {
-
+  if(FireUserValues.route){
    var routesOpenToPublic = [];
    angular.forEach($route.routes, function(route, path) {
        // push route onto routesOpenToPublic if it has a truthy publicAccess value
-       route.publicAccess && (routesOpenToPublic.push(path));
+       route[FireUserValues.routeaccess] && (routesOpenToPublic.push(path));
    });
 
    $rootScope.$on('$routeChangeStart', function(event, nextLoc, currentLoc) {
@@ -23,7 +25,8 @@ function($rootScope, $location, $fireUser, $route, FireUserValues) {
           console.log('redirect to login')
            $location.path('/login');
        }
-   });
+   });    
+  }
 }])
 .service('FireUserValues',['FireUserDefault','FireUserConfig',function (FireUserDefault,FireUserConfig) {
   FireUserConfig = angular.extend(FireUserDefault,FireUserConfig);
