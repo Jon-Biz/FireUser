@@ -7,7 +7,8 @@ angular.module('fireUser', ['firebase'])
   userdata:'user',
   iconCss:'fontawesome',
   route: true,
-  routeaccess: 'publicAccess'
+  routeaccess: 'publicAccess',
+  redirect: '/login'
 })
 .service('FireUserValues',['FireUserDefault','FireUserConfig',function (FireUserDefault,FireUserConfig) {
   FireUserConfig = angular.extend(FireUserDefault,FireUserConfig);
@@ -27,7 +28,7 @@ function($rootScope, $location, $fireUser, $route, FireUserValues) {
        console.log($rootScope[FireUserValues.datalocation]);
        if(closedToPublic && !$rootScope[FireUserValues.datalocation].userInfo) {
           console.log('redirect to login')
-           $location.path('/login');
+           $location.path(FireUserValues.redirect);
        }
    });    
   }
