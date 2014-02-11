@@ -7,6 +7,24 @@ angular.module('fireUser', ['firebase'])
   userdata:'user',
   iconCss:'fontawesome'
 })
+.run(['$rootScope', '$location', '$fireUser', '$route','FireUserValues', 
+function($rootScope, $location, $fireUser, $route, FireUserValues) {
+
+   var routesOpenToPublic = [];
+   angular.forEach($route.routes, function(route, path) {
+       // push route onto routesOpenToPublic if it has a truthy publicAccess value
+       route.publicAccess && (routesOpenToPublic.push(path));
+   });
+
+   $rootScope.$on('$routeChangeStart', function(event, nextLoc, currentLoc) {
+       var closedToPublic = (-1 === routesOpenToPublic.indexOf($location.path()));
+       console.log($rootScope[FireUserValues.datalocation]);
+       if(closedToPublic && !$rootScope[FireUserValues.datalocation].userInfo) {
+          console.log('redirect to login')
+           $location.path('/login');
+       }
+   });
+}])
 .service('FireUserValues',['FireUserDefault','FireUserConfig',function (FireUserDefault,FireUserConfig) {
   FireUserConfig = angular.extend(FireUserDefault,FireUserConfig);
   return FireUserConfig;
@@ -48,11 +66,15 @@ angular.module('fireUser', ['firebase'])
 
       var _angularFireRef = $firebase(FirebaseUrl);
 
-      var datalocation = FireUserValues.datalocation+'.'+FireUserValues.userdata;
-      _angularFireRef.$bind($rootScope, datalocation).then(function(unb) {
+      var userDataLocation = FireUserValues.datalocation+'.'+FireUserValues.userdata;
+
+      _angularFireRef.$bind($rootScope, userDataLocation).then(function(unb) {
         unbind = unb;
       });
 
+      $rootScope[FireUserValues.datalocation].userInfo = user;
+      console.log('userinfo')
+      console.log($rootScope[FireUserValues.datalocation].userInfo)
       _angularFireRef.$on('loaded', function(data) {
         $rootScope.$broadcast(self.USER_DATA_LOADED_EVENT, data);
       });
