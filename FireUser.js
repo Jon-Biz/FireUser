@@ -9,6 +9,10 @@ angular.module('fireUser', ['firebase'])
   route: true,
   routeaccess: 'publicAccess'
 })
+.service('FireUserValues',['FireUserDefault','FireUserConfig',function (FireUserDefault,FireUserConfig) {
+  FireUserConfig = angular.extend(FireUserDefault,FireUserConfig);
+  return FireUserConfig;
+}])
 .run(['$rootScope', '$location', '$fireUser', '$route','FireUserValues', 
 function($rootScope, $location, $fireUser, $route, FireUserValues) {
   if(FireUserValues.route){
@@ -27,10 +31,6 @@ function($rootScope, $location, $fireUser, $route, FireUserValues) {
        }
    });    
   }
-}])
-.service('FireUserValues',['FireUserDefault','FireUserConfig',function (FireUserDefault,FireUserConfig) {
-  FireUserConfig = angular.extend(FireUserDefault,FireUserConfig);
-  return FireUserConfig;
 }])
 .service('$fireUser', ['$firebaseSimpleLogin', '$firebase', '$rootScope', 'FireUserValues','$log',
   function ($firebaseSimpleLogin, $firebase, $rootScope, FireUserValues, $log) {
