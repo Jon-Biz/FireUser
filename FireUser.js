@@ -119,7 +119,7 @@ angular.module('fireUser', ['firebase'])
         type:'@'
       },
       replace: true,
-      template: '<i ng-click="login(type)"></i>',
+      template: '<i id="login" ng-click="login(type)"></i>',
       controller:'fireuserloginCTRL',
       link: function ($scope,element,attr,ctrl) {
         if(FireUserValues.iconCss === 'fontawesome'){
@@ -140,7 +140,7 @@ angular.module('fireUser', ['firebase'])
         type:'@'
       },
       replace: true,
-      template: '<div ng-click="logout()">Logout</div>',
+      template: '<div id="logout" ng-click="logout()">Logout</div>',
       controller:'fireuserlogoutCTRL',
       restrict: 'E'
     };
@@ -161,10 +161,10 @@ angular.module('fireUser', ['firebase'])
       element.html(
         '<form id="loginForm" name="loginForm" ng-submit="login()">'+
           '<formgroup>'+
-            'Email <input class="form-control" type="email" name="email" ng-model="email" required/>'+
+            'Email <input class="form-control" id="email" type="email" name="email" ng-model="email" required/>'+
           '</formgroup>'+
           '<formgroup>'+
-            'Password <input class="form-control" type="text" name="password" ng-model="password" required/>'+
+            'Password <input class="form-control" id="password" type="text" name="password" ng-model="password" required/>'+
           '</formgroup>'+
           '<br />'+
           '<button id="submitBtn" class="btn btn-primary pull-right" type="submit" value="login">Log in</button>'+
@@ -190,10 +190,10 @@ angular.module('fireUser', ['firebase'])
       element.html(
         '<form name="signupForm" ng-submit="createUser()">'+
           '<formgroup>'+
-            'Email <input class="form-control" type="email" name="email" ng-model="email" required/>'+
+            'Email <input class="form-control" id="email" type="email" name="email" ng-model="email" required/>'+
           '</formgroup>'+
           '<formgroup>'+
-            'Password <input class="form-control" type="text" name="password" ng-model="password" required/>'+
+            'Password <input class="form-control" id="password" type="text" name="password" ng-model="password" required/>'+
           '</formgroup>'+
         '  <br />'+
         '  <button type="submit" class="btn btn-primary pull-right" value="creatUser">Sign Up</button>'+
