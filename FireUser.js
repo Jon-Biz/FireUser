@@ -28,7 +28,7 @@ function($rootScope, $location, $fireUser, $route, FireUserValues) {
        console.log($rootScope[FireUserValues.datalocation]);
        if(closedToPublic && !$rootScope[FireUserValues.datalocation].userInfo) {
           console.log('redirect to login')
-           $location.path(FireUserValues.redirect);
+          $location.path(FireUserValues.redirect);
        }
    });    
   }
