@@ -135,7 +135,7 @@ angular.module('fireUser', ['firebase'])
 .controller('fireuserlogoutCTRL',['$scope','$fireUser',function ($scope, $fireUser) {
   $scope.logout = $fireUser.logout;
   }])
-.directive('fireuserlogout', [function() {
+.directive('fireuserlogout', ['FireUserValues',function() {
     return {
       scope:{
         type:'@'
