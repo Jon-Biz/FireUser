@@ -99,8 +99,8 @@ The directive controllers are available separately, so you can ````require```` t
 ####fireuserloginCTRL
 
 ````$scope.login(type)````
-
 Specify the login type as the parameter - ie - 'github','facebook','twitter'
+
 
 ####fireuserlogoutCTRL
 
