@@ -5,11 +5,11 @@ FireUser is a user management module for Angular Firebase applications.  Configu
 
 FireUser handles user registration, login and databinding, and includes directives for user management, Firebase's email based login and third party login provider methods (ie - Github, Facebook, Twitter). You can use these directives to add functionality quickly, or access the API directly with your own - the authentication API behaves identically to Firebase's auth library that is accessing, so if you are already familiar with Firebase, you already know how to use it.
 
-There is a simple demo here:
+There is a simple demo running here:
 
 http://glaring-fire-5689.firebaseapp.com/
 
-You can log in with github, twitter, or create an account with an email address and password. After login a text field appears, that persists between logins.
+You can log in with github, twitter, or create an account with an email address and password. After login a text field appears, that persists between logins. The code for the demo is in included in this repo, you can run it yourself by serving the ````demo/app```` directory on a local server, such as httpster.
 
 ## Installation
 Install via bower
@@ -60,6 +60,7 @@ So, if both are left unspecified, user's data is made available from ````$rootSc
 ````iconCss````: 'fontawesome'
 
 iconCss specifies the icon font to use with the third party provider logins. Currently fontawesome is supported.
+*This will be going away soon* 
 
 ## Directives
 
@@ -90,6 +91,38 @@ This directive calls FireUser.logout() which unbinds your userdata location on t
 ### `<FireUserSignUp />`
 
 Creates a Signup Form with user name, password etc.
+
+## Controllers
+
+The directive controllers are available separately, so you can ````require```` them in your own directives.
+
+####fireuserloginCTRL
+
+````$scope.login(type)````
+
+Specify the login type as the parameter - ie - 'github','facebook','twitter'
+
+####fireuserlogoutCTRL
+
+````$scope.logout()````
+
+Logs the user out.
+
+####fireuserloginformCTRL
+
+````$scope.login()````
+````$scope.email````
+````$scope.password````
+
+Call ````login()```` after ````email```` and ````password```` are set to login via email.
+
+####fireusersignupCTRL
+
+````$scope.signup()````
+````$scope.email````
+````$scope.password````
+
+Call ````signup()```` after ````email```` and ````password```` are set to login via email.
 
 ## API
 
