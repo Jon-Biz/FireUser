@@ -1,3 +1,4 @@
+
 #FireUser
 ##User management boilerplate for Angularjs & Firebase
 
@@ -9,7 +10,7 @@ There is a simple demo running here:
 
 http://glaring-fire-5689.firebaseapp.com/
 
-You can log in with github, twitter, or create an account with an email address and password. After login a text field appears, that persists between logins. The code for the demo is in included in this repo, you can run it yourself by serving the ````demo/app```` directory on a local server, such as httpster.
+You can log in with github, twitter, or create an account with an email address and password. After login a text field appears, that persists between logins. The code for the demo is in included in this repo, you can run it yourself by serving the `demo/app` directory on a local server, such as httpster.
 
 ## Installation
 Install via bower
@@ -23,9 +24,9 @@ Or clone this repo. You will also need to include the [Angularfire and firebase.
 ### FireUser options constant
 
 Like any angular module, you will need to add a reference to fireUser.
-js in your index.html, and specify module ````fireUser```` in your application's dependencies.
+js in your index.html, and specify module `fireUser` in your application's dependencies.
 
-With that out of the way, you need to specify your project's Firebase url, where you want to place the data, and (optionally) third party secrets for facebook API. FireUser takes an angular Value service called ````FireUserConfig```` containing these options. 
+With that out of the way, you need to specify your project's Firebase url, where you want to place the data, and (optionally) third party secrets for facebook API. FireUser takes an angular Value service called `FireUserConfig` containing these options. 
 
 Here's a minimal example of fireUser configuration:
   
@@ -46,18 +47,18 @@ Here's one with all optional configuration parameter:
 		})
 
 
-````url````: this is your firebase url. 
+`url`: this is your firebase url. 
 
-````DataDir```` *(optional)*: this is the name of the data object you want to bind to your firebase data, and the name of the firebase data. Defaults to ````data````
+`DataDir` *(optional)*: this is the name of the data object you want to bind to your firebase data, and the name of the firebase data. Defaults to `data`
 
-````Userdata```` *(optional)*: this is where the user data should be stored within your data directory. It defaults to ````user````. 
+`Userdata` *(optional)*: this is where the user data should be stored within your data directory. It defaults to `user`. 
 
-So, if both are left unspecified, user's data is made available from ````$rootScope.data.user```` and passes up through the scope inheritance chain.
+So, if both are left unspecified, user's data is made available from `$rootScope.data.user` and passes up through the scope inheritance chain.
 
 (These two parameters are required due to angular's $scope inheritance and dot notation.)
 
 
-````iconCss````: 'fontawesome'
+`iconCss`: 'fontawesome'
 
 iconCss specifies the icon font to use with the third party provider logins. Currently fontawesome is supported.
 *This will be going away soon* 
@@ -66,9 +67,9 @@ iconCss specifies the icon font to use with the third party provider logins. Cur
 
 ### Logging in
 
-````<FireUserLogin type='yourloginproviderhere'/>```` 
+`<FireUserLogin type='yourloginproviderhere'/>` 
 
-Use the Class configuration to specify the css that will display a font for login button. If you leave the ````iconCss```` empty, it will default to fontawesome css font library. So:
+Use the Class configuration to specify the css that will display a font for login button. If you leave the `iconCss` empty, it will default to fontawesome css font library. So:
 
 	<FireUserLogin type='github' />
 
@@ -76,7 +77,7 @@ Use the Class configuration to specify the css that will display a font for logi
 
 	<i class='fa fa-github' ></i>
 
-### ````<FireUserLoginForm />````
+### `<FireUserLoginForm />`
 
 This directive provides a login form for email/password based logins. 
 
@@ -94,35 +95,36 @@ Creates a Signup Form with user name, password etc.
 
 ## Controllers
 
-The directive controllers are available separately, so you can ````require```` them in your own directives.
+The directive controllers are available separately, so you can `require` them in your own directives.
 
 ####fireuserloginCTRL
 
-````$scope.login(type)````
+`$scope.login(type)`
+
 Specify the login type as the parameter - ie - 'github','facebook','twitter'
 
 
 ####fireuserlogoutCTRL
 
-````$scope.logout()````
+`$scope.logout()`
 
 Logs the user out.
 
 ####fireuserloginformCTRL
 
-````$scope.login()````
-````$scope.email````
-````$scope.password````
+`$scope.login()`
+`$scope.email`
+`$scope.password`
 
-Call ````login()```` after ````email```` and ````password```` are set to login via email.
+Call `login()` after `email` and `password` are set to login via email.
 
 ####fireusersignupCTRL
 
-````$scope.signup()````
-````$scope.email````
-````$scope.password````
+`$scope.signup()`
+`$scope.email`
+`$scope.password`
 
-Call ````signup()```` after ````email```` and ````password```` are set to login via email.
+Call `signup()` after `email` and `password` are set to login via email.
 
 ## API
 
@@ -131,7 +133,7 @@ The api wraps the angularfire modules access methods, so if you prefer to point 
 
 ####LogIn(user)
 
-User is a either a scope or an object containing ````user.email```` and ````user.password````
+User is a either a scope or an object containing `user.email` and `user.password`
 
 ####LogOut()
 
@@ -139,11 +141,11 @@ Logs the user out.
 
 ####NewUser(user)
 
-User is either a scope or an object containing ````user.email```` or ````user.password````
+User is either a scope or an object containing `user.email` or `user.password`
 
 ####SendPasswordResetEmail(emailaddress,callback)
 
-Like the Firebase API it is wrapping, the callback should take two Boolean arguments - ````error```` and ````success````.
+Like the Firebase API it is wrapping, the callback should take two Boolean arguments - `error` and `success`.
 
 ## About
 
