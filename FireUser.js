@@ -3,11 +3,11 @@
 angular.module('fireUser', ['firebase','ui.router'])
 .constant('FireUserDefault', {
   redirectPath:'/',
-  datalocation:'data',
-  userdata:'user',
+  dataLocation:'data',
+  userData:'user',
   routing: false,
-  routeaccess: 'private',
-  redirect: 'login'
+  routeAccess: 'private',
+  routeRedirect: 'login'
 })
 .service('FireUserValues',['FireUserDefault','FireUserConfig',function (FireUserDefault,FireUserConfig) {
   FireUserConfig = angular.extend(FireUserDefault,FireUserConfig);
@@ -25,9 +25,9 @@ function($rootScope, $location, $fireUser, $state, FireUserValues,waitForAuth) {
         event.preventDefault();
 
         waitForAuth.then(function() {
-           if(!toState[FireUserValues.routeaccess] && !$rootScope[FireUserValues.datalocation].userInfo){
+           if(!toState[FireUserValues.routeAccess] && !$rootScope[FireUserValues.dataLocation].userInfo){
 
-              $state.go(FireUserValues.routingRedirect)
+              $state.go(FireUserValues.routeRedirect)
 
           }else{
             checked = toState.name
@@ -48,7 +48,7 @@ function($rootScope, $location, $fireUser, $state, FireUserValues,waitForAuth) {
   function ($firebaseSimpleLogin, $firebase, $rootScope, FireUserValues, $log,waitforAuth) {
 
     // create data scope 
-    $rootScope[FireUserValues.datalocation] = {};
+    $rootScope[FireUserValues.dataLocation] = {};
 
     // Possible events broadcasted by this service
     this.USER_CREATED_EVENT = 'fireuser:user_created';
@@ -78,17 +78,17 @@ function($rootScope, $location, $fireUser, $state, FireUserValues,waitForAuth) {
 
     $rootScope.$on('$firebaseSimpleLogin:login', function(evt, user) {
 
-      var FirebaseUrl = new Firebase(FireUserValues.url + FireUserValues.datalocation + '/' + user.id);
+      var FirebaseUrl = new Firebase(FireUserValues.url + FireUserValues.dataLocation + '/' + user.id);
 
       var _angularFireRef = $firebase(FirebaseUrl);
 
-      var userDataLocation = FireUserValues.datalocation+'.'+FireUserValues.userdata;
+      var userDataLocation = FireUserValues.dataLocation+'.'+FireUserValues.userData;
 
       _angularFireRef.$bind($rootScope, userDataLocation).then(function(unb) {
         unbind = unb;
       });
 
-      $rootScope[FireUserValues.datalocation].userInfo = user;
+      $rootScope[FireUserValues.dataLocation].userInfo = user;
 
       _angularFireRef.$on('loaded', function(data) {
         console.log('data loaded',data);
