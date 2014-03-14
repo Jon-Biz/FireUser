@@ -1,153 +1,213 @@
 #FireUser
 ##User management boilerplate for Angularjs & Firebase
 
-FireUser is a user management module for Angular Firebase applications.  Configure FireUser with your firebase URL and data location, drop some of the accompanying directives into your app, and you are storing your users' data in your firebase database.
+FireUser is a user management module for Angular Firebase applications.  
 
-FireUser handles user registration, login and databinding, and includes directives for user management, Firebase's email based login and third party login provider methods (ie - Github, Facebook, Twitter). You can use these directives to add functionality quickly, or access the API directly with your own - the authentication API behaves identically to Firebase's auth library that is accessing, so if you are already familiar with Firebase, you already know how to use it.
+Configure FireUser with your firebase URL and data location, drop some of the accompanying directives into your app, and you are storing your users' data in your firebase database. FireUser now also handles routing permissions and redirection, so you can direct users to login before gaining access to parts of your site.
 
-There is a simple demo running here:
+FireUser handles user registration, login and databinding and includes directives supporting Firebase's email based login and third party login provider methods (ie - Github, Facebook, Twitter). These directives are skinned with Bootstrap and the FontAwesome css icon library. The controllers are also available, so you can include them in your own directives.
+
+There is a simple demo here:
 
 http://glaring-fire-5689.firebaseapp.com/
 
-You can log in with github, twitter, or create an account with an email address and password. After login a text field appears, that persists between logins. The code for the demo is in included in this repo, you can run it yourself by serving the ````demo/app```` directory on a local server, such as httpster.
+You can log in with github, twitter, or create an account with an email address and password. After login, you will be redirected to the main page, where a text field appears that persists between logins.
 
 ## Installation
 Install via bower
 
 	bower install fireuser --save
 
-Or clone this repo. You will also need to include the [Angularfire and firebase.js](https://www.firebase.com/quickstart/angularjs.html) libraries in your application, and if you want to use the accompanying directives as-is, the [Fontawesome css icon library](http://fontawesome.io/) (for the github, facebook, twitter logins), and [Bootstrap](http://getbootstrap.com/) (for the email login forms).
+Or clone this repo. 
+
+You will also need to include the [Angularfire and firebase.js](https://www.firebase.com/quickstart/angularjs.html) and [Firebase simple login](https://github.com/firebase/firebase-simple-login/) libraries in your application. 
+
+If you want to use the accompanying directives, the [Fontawesome css icon library](http://fontawesome.io/) (for the github, facebook, twitter logins), and [Bootstrap](http://getbootstrap.com/) (for the email login forms).
+
+If you intend to use FireUser to limit parts of your site to logged in users only, you will need angular ui's [state based router](https://github.com/angular-ui/ui-router). 
 
 ## Setup
 
-### FireUser options constant
-
 Like any angular module, you will need to add a reference to fireUser.
-js in your index.html, and specify module ````fireUser```` in your application's dependencies.
+js, and specify module `fireUser` in your application's dependencies. 
 
-With that out of the way, you need to specify your project's Firebase url, where you want to place the data, and (optionally) third party secrets for facebook API. FireUser takes an angular Value service called ````FireUserConfig```` containing these options. 
+Naturally, you'll also need to set up a [Firebase database](http://firebase.com) that you will be accessing. If you intend to use do use third party logins (ie facebook, github, or twitter), you will need to set up the application permission for these in firebase.
 
-Here's a minimal example of fireUser configuration:
+### FireUserConfig options value
+
+With that out of the way, you need to specify your project's Firebase url. FireUser consumes an angular value service called `FireUserConfig` that holds this and other options you can set.
+
+Here's a absolute minimal example of fireUser configuration:
   
-	angular.module('fireUser').value('FireUserConfig',{
+	angular.module('fireUser').value('fireUserConfig',{
 		url:"http://your/firebase/url/"
 		};
 
-All you need to specify is the Firebase url. 
+All you need to specify is the Firebase url.
 
-Here's one with all optional configuration parameter:
+Here's one with all the optional configuration parameters set:
 
-	angular.module('fireUser').value('FireUserConfig',{
+	angular.module('fireUser').value('fireUserConfig',{
 		url:"http://your/firebase/url",
-		redirectPath:'/',
-		DataDir: "nameOfRootDataDir",	
-		Userdata: "nameofuserdatalocation",
-		iconCss: "fontawesome"
-		})
+		redirectPath:'/',								
+		routing: true,
+		routeAccess: 'private',
+		routeRedirect: 'login'
+		dataLocation: "nameOfRootDataDir",	
+		userData: "nameofuserdatalocation"
 
+`url`: this is your firebase url. 
 
-````url````: this is your firebase url. 
+`redirectPath` This is the path you want Firebase's simple login to sent people to once they have logged in.
 
-````DataDir```` *(optional)*: this is the name of the data object you want to bind to your firebase data, and the name of the firebase data. Defaults to ````data````
+`routing` (boolean) Enabling this enables FireUser's to manage permissions of states of the angular-ui-router. States marked with the name under `RouteAccess` will redirected to the `redirectState` state.
 
-````Userdata```` *(optional)*: this is where the user data should be stored within your data directory. It defaults to ````user````. 
+`DataDir` *(optional)*: this is the name of the data object you want to bind to your firebase data, and the name of the firebase data. Defaults to `data`
 
-So, if both are left unspecified, user's data is made available from ````$rootScope.data.user```` and passes up through the scope inheritance chain.
+`Userdata` *(optional)*: this is where the user data should be stored within your data directory. It defaults to `user`. 
 
-(These two parameters are required due to angular's $scope inheritance and dot notation.)
+So, if both are left unspecified, user's data is made available from `$rootScope.data.user` and passes up through the scope inheritance chain. 
 
+Once the user is logged in, the user's login information is placed in `userinfo` in the data directory. So, by default it would be accessible via `data.userinfo`. You can also evaluate the existence of this to determine where a user has logged in or now - ie `<div ng-show:'data.userinfo'>`
 
-````iconCss````: 'fontawesome'
-
-iconCss specifies the icon font to use with the third party provider logins. Currently fontawesome is supported.
-*This will be going away soon* 
+# Usage
 
 ## Directives
 
 ### Logging in
 
-````<FireUserLogin type='yourloginproviderhere'/>```` 
+`<fuLogin type='yourloginproviderhere'/>` 
 
-Use the Class configuration to specify the css that will display a font for login button. If you leave the ````iconCss```` empty, it will default to fontawesome css font library. So:
+This creates an icon element, which, when clicked on, redirects them to their provider to get permissions. It will decorated with the fontawesome's css icon for that provider, so this:
 
-	<FireUserLogin type='github' />
+	<fuLogin type='github' />
 
-	becomes
-
+Will appear as this:
 	<i class='fa fa-github' ></i>
 
-### ````<FireUserLoginForm />````
+In the browser's html.
 
-This directive provides a login form for email/password based logins. 
+If you want to use another icon set, include the associated controller (`fuLoginCtrlr`) in your directive.
+
+### `<fuLoginForm />`
+
+This directive provides a login form for email/password based logins. It uses bootstrap's css to output this:
+
+
 
 ### Logging out
 
-### `<FireUserLogOut />`
+### `<fuLogOut />`
 
-This directive calls FireUser.logout() which unbinds your userdata location on the scope from Firebase, and calls Firebase auth's logout function.
+This directive calls fu.logout() which unbinds your userdata location on the scope from Firebase, and calls Firebase auth's logout function.
 
 ### Signup
 
-### `<FireUserSignUp />`
+### `<fuSignUp />`
 
-Creates a Signup Form with user name, password etc.
+Creates a Signup Form with user name, password etc. Like the login form, it uses bootstrap.
+
+##Routing
+When a user accesses your page without being logged in, they are redirected to the `routeRedirect` state, which is the natural place for your login directives. Upon logging in, they are returned to the page the came from, or sent to the redirectState.
+
+To set up routing, set `routing` to true in your configuration, and add `routeAccess` (defaults to 'private') as a boolean to each route you wish to redirect, set to true.
+
+     $stateProvider
+        .state('home',{
+          url:'/',
+          templateUrl: 'views/otherwise.html',
+          controller: 'Main',
+          private:true
+        })
+        .state('login',{
+          url:'/login',
+          templateUrl: 'views/test.html',
+          controller: 'Main',
+          private:false 
+        })
+
+###Events
+
+Fireuser broadcasts the following events on $rootScope. 
+
+`'fireuser:login'`
+
+`'fireuser:login_error'`
+
+`'fireuser:logout'`
+
+`'fireuser:user_created'`
+
+`'fireuser:data_changed'`
+
+`'fireuser:data_loaded'`
+
+`'fireuser:user_creation_error'`
+
+`data_changed`,`data_loaded`,`'login'`,`'login_error'``'user_creation_error' all also include their respective data object, such as the error message returned, or that of the user who has just logged in.
 
 ## Controllers
 
-The directive controllers are available separately, so you can ````require```` them in your own directives.
+If you want to build your own directives, include or `require` these controllers in your directive definition object. If you build directives using any popular css library, such as foundation, don't forget to share!
 
-####fireuserloginCTRL
+### `fuLoginCtrl`
 
-````$scope.login(type)````
+`$scope.login(name, password)`
 
-Specify the login type as the parameter - ie - 'github','facebook','twitter'
+### `LogoutCtrl`
 
-####fireuserlogoutCTRL
+`$scope.logout()`
 
-````$scope.logout()````
+## FireUser Service API
 
-Logs the user out.
+####FireUser.LogIn(user)
 
-####fireuserloginformCTRL
+User is a either a scope or an object containing `user.email` and `user.password`
 
-````$scope.login()````
-````$scope.email````
-````$scope.password````
-
-Call ````login()```` after ````email```` and ````password```` are set to login via email.
-
-####fireusersignupCTRL
-
-````$scope.signup()````
-````$scope.email````
-````$scope.password````
-
-Call ````signup()```` after ````email```` and ````password```` are set to login via email.
-
-## API
-
-The api wraps the angularfire modules access methods, so if you prefer to point your directives to that, you can do so.
-
-
-####LogIn(user)
-
-User is a either a scope or an object containing ````user.email```` and ````user.password````
-
-####LogOut()
+####FireUser.LogOut()
 
 Logs the user out.
 
-####NewUser(user)
+####FireUser.NewUser(user)
 
-User is either a scope or an object containing ````user.email```` or ````user.password````
+User is either a scope or an object containing `user.email` or `user.password`
 
-####SendPasswordResetEmail(emailaddress,callback)
+####FireUserSendPasswordResetEmail(emailaddress,callback)
 
-Like the Firebase API it is wrapping, the callback should take two Boolean arguments - ````error```` and ````success````.
+Like the Firebase API it is wrapping, the callback should take two Boolean arguments - `error` and `success`.
+
+## Demo
+
+The demo app is included in this repo. Do a separate `bower install` within the demo directory and then serve `demo/app` (Httpster is quick and convenient). 
+
+## Tests
+
+To run the tests install the development dependencies via bower (`bower install --dev`)
+
+To run the unit tests: run `grunt test:unit`
+The demo app also includes E2E tests, using protractor. To run these: `grunt test:e2e
+
+## Changes
+
+## What's New in vXXX
+
+*Major Changes*
+- integration with angular-ui-router state-based routing
+- separated controllers from directives for inclusion in other directives
+
+*Breaking Changes!*
+
+- refactor 
+  - directive namespace from `fireuserXXX` to `fuXXX`
+  - userdata to userData
+  - datalocation to dataLocation
+
+*Minor Changes*
+- removed icon source specifcation from config
 
 ## About
 
-FireUser was created by Jonathan El-Bizri and Austin Brown, two Angular js developers in San Francisco.
+FireUser was created by Jonathan El-Bizri and Austin Brown, two Angular js developers in San Francisco. Hire Us!
 
 https://github.com/Jon-Biz
 https://github.com/thataustin
