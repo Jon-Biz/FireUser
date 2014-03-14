@@ -1,12 +1,12 @@
 'use strict';
 
-angular.module('fireUser', ['firebase'])
+angular.module('fireUser', ['firebase','ui.router'])
 .constant('FireUserDefault', {
   redirectPath:'/',
   datalocation:'data',
   userdata:'user',
   iconCss:'fontawesome',
-  route: true,
+  route: false,
   routeaccess: 'publicAccess',
   redirect: '/login'
 })
@@ -14,23 +14,17 @@ angular.module('fireUser', ['firebase'])
   FireUserConfig = angular.extend(FireUserDefault,FireUserConfig);
   return FireUserConfig;
 }])
-.run(['$rootScope', '$location', '$fireUser', '$route','FireUserValues', 
-function($rootScope, $location, $fireUser, $route, FireUserValues) {
+.run(['$rootScope', '$location', '$fireUser', '$state','FireUserValues', 
+function($rootScope, $location, $fireUser, $state, FireUserValues) {
+
   if(FireUserValues.route){
-   var routesOpenToPublic = [];
-   angular.forEach($route.routes, function(route, path) {
-       // push route onto routesOpenToPublic if it has a truthy publicAccess value
-       route[FireUserValues.routeaccess] && (routesOpenToPublic.push(path));
-   });
 
    $rootScope.$on('$routeChangeStart', function(event, nextLoc, currentLoc) {
-       var closedToPublic = (-1 === routesOpenToPublic.indexOf($location.path()));
-       console.log($rootScope[FireUserValues.datalocation]);
-       if(closedToPublic && !$rootScope[FireUserValues.datalocation].userInfo) {
-          console.log('redirect to login')
-          $location.path(FireUserValues.redirect);
-       }
-   });    
+      if($state.current[FireUserValues.access] && !$rootScope[FireUserValues.datalocation]){
+          $state.go(FireUserValues.redirect)
+      }
+    });
+    
   }
 }])
 .service('$fireUser', ['$firebaseSimpleLogin', '$firebase', '$rootScope', 'FireUserValues','$log',
