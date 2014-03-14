@@ -41,7 +41,7 @@ Here's a absolute minimal example of fireUser configuration:
   
 	angular.module('fireUser').value('fireUserConfig',{
 		url:"http://your/firebase/url/"
-		};
+		});
 
 All you need to specify is the Firebase url.
 
