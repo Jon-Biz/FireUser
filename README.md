@@ -189,7 +189,7 @@ The demo app also includes E2E tests, using protractor. To run these: `grunt tes
 
 ## Changes
 
-## What's New in vXXX
+## What's New in version 0.4.0
 
 *Major Changes*
 - integration with angular-ui-router state-based routing
