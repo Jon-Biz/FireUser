@@ -187,7 +187,7 @@ function($rootScope, $location, $fireUser, $state, FireUserValues,waitForAuth) {
       restrict: 'E'
     };
   }])
-.controller('fireuserlogoutCTRL',['$scope','$fireUser',function ($scope, $fireUser) {
+.controller('fireuserlogoutCtrl',['$scope','$fireUser',function ($scope, $fireUser) {
   $scope.logout = $fireUser.logout;
   }])
 .directive('fireuserlogout', [function() {
@@ -197,11 +197,11 @@ function($rootScope, $location, $fireUser, $state, FireUserValues,waitForAuth) {
       },
       replace: true,
       template: '<div ng-click="logout()">Logout</div>',
-      controller:'fireuserlogoutCTRL',
+      controller:'fireuserlogoutCtrl',
       restrict: 'E'
     };
   }])
-.controller('fireuserloginformCTRL',['$scope', '$fireUser', function ($scope, $fireUser) {
+.controller('fireuserloginformCtrl',['$scope', '$fireUser', function ($scope, $fireUser) {
 
       $scope.login = function () {
         $fireUser.login('password',{ email: $scope.email, password: $scope.password });
@@ -212,7 +212,7 @@ function($rootScope, $location, $fireUser, $state, FireUserValues,waitForAuth) {
   return {
     scope:{},
     restrict:'E',
-    controller:'fireuserloginformCTRL',
+    controller:'fireuserloginformCtrl',
     link:function ($scope,element,attr,ctrl) {
       element.html(
         '<form id="loginForm" name="loginForm" ng-submit="login()">'+
@@ -230,7 +230,7 @@ function($rootScope, $location, $fireUser, $state, FireUserValues,waitForAuth) {
     }
   };
 }])
-.controller('fireusersignupformCTRL',['$scope', '$fireUser', function ($scope, $fireUser) {
+.controller('fireusersignupformCtrl',['$scope', '$fireUser', function ($scope, $fireUser) {
 
       $scope.createUser = function () {
         $fireUser.createUser({ email: $scope.email, password: $scope.password });
@@ -241,7 +241,7 @@ function($rootScope, $location, $fireUser, $state, FireUserValues,waitForAuth) {
   return {
     scope:{},
     restrict:'E',
-    controller:'fireusersignupformCTRL',
+    controller:'fireusersignupformCtrl',
     link:function ($scope,element,attr,ctrl) {
       element.html(
         '<form name="signupForm" ng-submit="createUser()">'+
