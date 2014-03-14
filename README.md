@@ -13,6 +13,22 @@ http://glaring-fire-5689.firebaseapp.com/
 
 You can log in with github, twitter, or create an account with an email address and password. After login, you will be redirected to the main page, where a text field appears that persists between logins.
 
+## What's New in version 0.4.0
+
+*Major Changes*
+- integration with angular-ui-router state-based routing
+- separated controllers from directives for inclusion in other directives
+
+*Breaking Changes!*
+
+- refactor 
+  - directive namespace from `fireuserXXX` to `fuXXX`
+  - userdata to userData
+  - datalocation to dataLocation
+
+*Minor Changes*
+- removed icon source specification from configuration file.
+
 ## Installation
 Install via bower
 
@@ -187,23 +203,6 @@ To run the tests install the development dependencies via bower (`bower install 
 To run the unit tests: run `grunt test:unit`
 The demo app also includes E2E tests, using protractor. To run these: `grunt test:e2e
 
-## Changes
-
-## What's New in version 0.4.0
-
-*Major Changes*
-- integration with angular-ui-router state-based routing
-- separated controllers from directives for inclusion in other directives
-
-*Breaking Changes!*
-
-- refactor 
-  - directive namespace from `fireuserXXX` to `fuXXX`
-  - userdata to userData
-  - datalocation to dataLocation
-
-*Minor Changes*
-- removed icon source specifcation from config
 
 ## About
 
