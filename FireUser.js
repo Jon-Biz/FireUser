@@ -5,33 +5,50 @@ angular.module('fireUser', ['firebase','ui.router'])
   redirectPath:'/',
   datalocation:'data',
   userdata:'user',
-  iconCss:'fontawesome',
-  route: false,
-  routeaccess: 'publicAccess',
-  redirect: '/login'
+  routing: false,
+  routeaccess: 'private',
+  redirect: 'login'
 })
 .service('FireUserValues',['FireUserDefault','FireUserConfig',function (FireUserDefault,FireUserConfig) {
   FireUserConfig = angular.extend(FireUserDefault,FireUserConfig);
   return FireUserConfig;
 }])
-.run(['$rootScope', '$location', '$fireUser', '$state','FireUserValues', 
-function($rootScope, $location, $fireUser, $state, FireUserValues) {
+.run(['$rootScope', '$location', '$fireUser', '$state','FireUserValues','waitForAuth', 
+function($rootScope, $location, $fireUser, $state, FireUserValues,waitForAuth) {
+  if(FireUserValues.routing){
 
-  if(FireUserValues.route){
+    var checked;
 
-   $rootScope.$on('$routeChangeStart', function(event, nextLoc, currentLoc) {
-      if($state.current[FireUserValues.access] && !$rootScope[FireUserValues.datalocation]){
-          $state.go(FireUserValues.redirect)
+    $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
+      if(checked!=toState.name){
+
+        event.preventDefault();
+
+        waitForAuth.then(function() {
+           if(!toState[FireUserValues.routeaccess] && !$rootScope[FireUserValues.datalocation].userInfo){
+
+              $state.go(FireUserValues.routingRedirect)
+
+          }else{
+            checked = toState.name
+            $state.go(toState.name,toParams)
+          };  
+        });        
+
+      } else {
+
+        // clear the flag and don't prevent the default if the state change 
+        // was just triggered by this watch
+        checked = false;
       }
-    });
-    
-  }
+    })
+  }; 
 }])
-.service('$fireUser', ['$firebaseSimpleLogin', '$firebase', '$rootScope', 'FireUserValues','$log',
-  function ($firebaseSimpleLogin, $firebase, $rootScope, FireUserValues, $log) {
+.service('$fireUser', ['$firebaseSimpleLogin', '$firebase', '$rootScope', 'FireUserValues','$log','waitForAuth',
+  function ($firebaseSimpleLogin, $firebase, $rootScope, FireUserValues, $log,waitforAuth) {
 
     // create data scope 
-    $rootScope[FireUserValues.datalocation] = {}
+    $rootScope[FireUserValues.datalocation] = {};
 
     // Possible events broadcasted by this service
     this.USER_CREATED_EVENT = 'fireuser:user_created';
@@ -46,16 +63,17 @@ function($rootScope, $location, $fireUser, $state, FireUserValues) {
     // kickoff the authentication call (fires events $firebaseAuth:* events)
     var auth = $firebaseSimpleLogin(new Firebase(FireUserValues.url), {'path': FireUserValues.redirectPath});
     var self = this;
-    var unbind = null;
-    var _angularFireRef = null;
+    var unbind = null;    var _angularFireRef = null;
+
+
 
     $rootScope.$on('$firebaseSimpleLogin:logout', function() {
       $rootScope.$broadcast(self.LOGOUT_EVENT);
     });
 
-    $rootScope.$on('$firebaseSimpleLogin:error', function(err) {
-      $rootScope.$broadcast(self.LOGIN_ERROR_EVENT);
-      $log.info('There was an error during authentication.', err);
+    $rootScope.$on('$firebaseSimpleLogin:error', function(error) {
+      $rootScope.$broadcast(self.LOGIN_ERROR_EVENT,error);
+      $log.info('There was an error during authentication.', error);
     });
 
     $rootScope.$on('$firebaseSimpleLogin:login', function(evt, user) {
@@ -71,9 +89,9 @@ function($rootScope, $location, $fireUser, $state, FireUserValues) {
       });
 
       $rootScope[FireUserValues.datalocation].userInfo = user;
-      console.log('userinfo')
-      console.log($rootScope[FireUserValues.datalocation].userInfo)
+
       _angularFireRef.$on('loaded', function(data) {
+        console.log('data loaded',data);
         $rootScope.$broadcast(self.USER_DATA_LOADED_EVENT, data);
       });
 
@@ -87,12 +105,12 @@ function($rootScope, $location, $fireUser, $state, FireUserValues) {
     this.createUser = function (user) {
 
       var userCreationSuccess = function () {
-        $rootScope.$broadcast(self.USER_CREATED_EVENT);
+        $rootScope.$broadcast(self.USER_CREATED_EVENT,user);
         $log.info('User created - User Id: ' + user.id + ', Email: ' + user.email);
       }
 
       var userCreationError = function (error) {
-        $rootScope.$broadcast(self.USER_CREATION_ERROR_EVENT);
+        $rootScope.$broadcast(self.USER_CREATION_ERROR_EVENT,error);
         $log.error(error);
       }
 
@@ -130,7 +148,29 @@ function($rootScope, $location, $fireUser, $state, FireUserValues) {
     return this;
   }
 ])
-.controller('fireuserloginCTRL',['$scope','$fireUser',function ($scope, $fireUser) {
+.service('waitForAuth', function($rootScope, $q, $timeout) {
+    function fn(err) {
+      if($rootScope.auth) {
+        $rootScope.auth.error = err instanceof Error? err.toString() : null;
+      }
+
+      for(var i=0; i < subs.length; i++) { subs[i](); }
+
+      $timeout(function() {
+        // force $scope.$apply to be re-run after login resolves
+        def.resolve();
+        console.log('resolved')
+      });
+    }
+ 
+    var def = $q.defer(), subs = [];
+    subs.push($rootScope.$on('$firebaseSimpleLogin:login', fn));
+    subs.push($rootScope.$on('$firebaseSimpleLogin:logout', fn));
+    subs.push($rootScope.$on('$firebaseSimpleLogin:error', fn));
+    return def.promise;
+
+  })
+.controller('fireuserloginCtrl',['$scope','$fireUser',function ($scope, $fireUser) {
   $scope.login = $fireUser.login;
   }])
 .directive('fireuserlogin', ['FireUserValues', function(FireUserValues) {
@@ -140,13 +180,9 @@ function($rootScope, $location, $fireUser, $state, FireUserValues) {
       },
       replace: true,
       template: '<i ng-click="login(type)"></i>',
-      controller:'fireuserloginCTRL',
+      controller:'fireuserloginCtrl',
       link: function ($scope,element,attr,ctrl) {
-        if(FireUserValues.iconCss === 'fontawesome'){
           element.addClass('fa fa-'+attr.type);
-        } else {
-          element.text = 'Log In with ' + attr.type;
-        }
       },
       restrict: 'E'
     };
