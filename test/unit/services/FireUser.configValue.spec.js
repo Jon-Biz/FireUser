@@ -4,17 +4,49 @@ xdescribe("the FireUser service", function() {
 
     beforeEach(function() {
 
-      Mocks.setupFireUser(this);
+      Mocks.setupFirebaseJS(this);
+
+      Mocks.setupAngularFire();
+
+      this.firebaseAuthStub = Mocks.setupFirebaseAuthMock(this);
+      this.firebaseMock = Mocks.setupFirebaseMock(this);
+      this.router$state = Mocks.setupRouter(this);
 
 		});
 
-		xit("should have an undefined FireUserConfig.url", inject(function($fireUser) {
-      expect($fireUser.options.url).not.toBeDefined();
+		it("should thorw and error if FireUserConfig.url is not defined", function() {
+      var errorflag = false;
+  
+      try{
+        var FUconfig = {
+        }
+        module('fireUser', function($provide) {
+          $provide.service('FireUserConfig',FUconfig);
+          $provide.service('$firebase',firebaseMock);
+          $provide.service('$firebaseSimpleLogin',firebaseAuthStub);
+          $provide.service('$state',router$state);
+        });
+
+      }
+      catch(err){
+        errorflag = true;
+      }
+
+      expect(errorflag).toBeTruthy();
+    });
+
+    xit("should thorw and error if FireUserConfig.url is not defined", inject(function() {
+      var errorflag = false;
+
+      try{
+      }
+      catch(err){
+//        errorflag = true;
+      }
+
+      expect(errorflag).toBeTruthy();
     }));
 
-		xit("should throw an error", function() {
-		  
-		});
   });
   xdescribe("when instantiated after a FireUserConfig value service is set", function() {
 

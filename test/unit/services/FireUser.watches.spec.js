@@ -1,7 +1,67 @@
 'use strict';
 
 
-describe('FirebaseRef Service', function () {
+xdescribe('FirebaseRef Service', function () {
+  beforeEach(function() {
+
+    Mocks.setupFireUser(this);
+  });
+
+
+  it("should rebroadcast logout messages", inject(function($fireUser) {
+      var logoutSpy = sinon.spy();
+      $rootScope.$on($fireUser.LOGOUT_EVENT,logoutSpy);  
+      $rootScope.$emit('$firebaseAuth:logout');
+  
+      expect(logoutSpy).toHaveBeenCalled();
+    }))
+
+  xit("should rebroadcast auth error messages", function() {
+    var authErrorSpy = sinon.spy();
+    this.scope.$on(this.fireUser.LOGIN_ERROR_EVENT,authErrorSpy);
+    this.scope.$emit('$firebaseAuth:error');
+
+    expect(authErrorSpy).toHaveBeenCalled();
+  })
+
+
+  xdescribe("when it receives the login message", function() {
+    describe("it should retrieve the user's data", function() {
+
+      beforeEach(function() {
+        this.user = {id:'test'}
+      });
+
+        
+      it("should redirect the app to the redirectPath - set $location.path to '/'", function() {
+        this.scope.$emit('$firebaseAuth:login',this.user);
+        expect(this.location.path()).toEqual('/' );
+      });
+      
+      it("should call the Firebase Global a second time", function() {
+        expect(window.Firebase).toHaveBeenCalledOnce();
+        this.scope.$emit('$firebaseAuth:login',this.user);
+        expect(window.Firebase).toHaveBeenCalledTwice();      
+      });
+      xit("should call the Firebase Global with the apropriate url", function() {
+        var url = this.FireUserDefault.url + this.FireUserDefault.datalocation + this.user.id
+        this.scope.$emit('$firebaseAuth:login',this.user);
+        expect(window.Firebase.args[1][0]).toEqual(url);
+      });
+
+      it("should rebroadcast login messages", function() {
+        var loginSpy = sinon.spy();
+        this.scope.$on(this.fireUser.LOGIN_EVENT,loginSpy);
+        this.scope.$emit('$firebaseAuth:login',this.user);
+
+        expect(loginSpy).toHaveBeenCalled();
+      });
+    });
+  });
+});
+
+
+xdescribe('FirebaseRef Service', function () {
   beforeEach(function() {
 
     // Firebase Global

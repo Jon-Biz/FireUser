@@ -1,6 +1,6 @@
 'use strict';
 
-describe("Directive: FireUserLogin", function() {
+xdescribe("Directive: FireUserLogin", function() {
 
   var scope;
 
