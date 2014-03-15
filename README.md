@@ -23,8 +23,9 @@ You can log in with github, twitter, or create an account with an email address 
 
 - refactor 
   - directive namespace from `fireuserXXX` to `fuXXX`
-  - userdata to userData
-  - datalocation to dataLocation
+  - In fireUserConfig:
+    - `userdata` to `userData`
+    - `datalocation` to `dataLocation`
 
 *Minor Changes*
 - removed icon source specification from configuration file.
