@@ -21,6 +21,7 @@
     "angular-mocks": "~1.2.7",
     "firebase": "~1.0.2",
     "sinon": "~1.7.3",
-    "jasmine-sinon": "~0.3.1"
+    "jasmine-sinon": "~0.3.1",
+    "angular-ui-router": "~0.2.10"
   }
 }
