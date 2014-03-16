@@ -10,6 +10,13 @@ angular.module('fireUser', ['firebase','ui.router'])
   routeRedirect: 'login'
 })
 .service('FireUserValues',['FireUserDefault','FireUserConfig',function (FireUserDefault,FireUserConfig) {
+
+  try {
+    if(!FireUserConfig.url) throw "heavens to betsy"
+  }catch(err){
+
+  }
+
   FireUserConfig = angular.extend(FireUserDefault,FireUserConfig);
   return FireUserConfig;
 }])
@@ -63,9 +70,8 @@ function($rootScope, $location, $fireUser, $state, FireUserValues,waitForAuth) {
     // kickoff the authentication call (fires events $firebaseAuth:* events)
     var auth = $firebaseSimpleLogin(new Firebase(FireUserValues.url), {'path': FireUserValues.redirectPath});
     var self = this;
-    var unbind = null;    var _angularFireRef = null;
-
-
+    var unbind = null;    
+    var _angularFireRef = null;
 
     $rootScope.$on('$firebaseSimpleLogin:logout', function() {
       $rootScope.$broadcast(self.LOGOUT_EVENT);
