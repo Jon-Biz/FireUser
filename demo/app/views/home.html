@@ -1,0 +1,43 @@
+
+	<h1 id="pageTitle">Fire User Demo - <span id='status'>{{loginstatus}}</span></h1>
+
+    <p>This is a demo of the FireUser user management library. 
+    </p>
+
+    <div ng-show="loginstate" class="pull-right">
+
+    <h4>Log Out Directive</h4>
+    <fireuserlogout class="btn btn-default"/></fireuserlogout>
+
+    You can log out by clicking this
+    </div>
+
+    <h4>Third party login directives</h4>
+    <fireuserlogin type='github' class='fa-2x'></fireuserlogin>
+
+    <!-- Removed until app settings are fixed in facebook -->
+    <!--fireuserlogin type='facebook' class='fa-2x'></fireuserlogin-->
+    
+    <fireuserlogin type='twitter' class='fa-2x'></fireuserlogin>
+
+    Login by clicking on an icon
+    <br />
+    
+    <div ng-show='loginstate'>
+    <h4>User data</h4>
+    <input type='text' ng-model="data.user"/> 
+    <br />
+    Anything you type in here will be stored in firebase.
+    </div>
+
+    <h4>New Email User signup</h4>
+    Signup for email login with this directive.
+    <fireusersignupform></fireusersignupform>
+    <br />
+
+    <h4>Email login</h4>
+    Login with email here.
+    You can create an email login with this directive.
+    <fireuserloginform></fireuserloginform>
+    <br />
+
