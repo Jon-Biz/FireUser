@@ -222,7 +222,7 @@ function($rootScope, $location, $fireUser, $state, FireUserValues,waitForAuth) {
             'Email <input class="form-control" type="email" name="email" ng-model="email" required/>'+
           '</formgroup>'+
           '<formgroup>'+
-            'Password <input class="form-control" type="text" name="password" ng-model="password" required/>'+
+            'Password <input class="form-control" type="password" name="password" ng-model="password" required/>'+
           '</formgroup>'+
           '<br />'+
           '<button id="submitBtn" class="btn btn-primary pull-right" type="submit" value="login">Log in</button>'+
