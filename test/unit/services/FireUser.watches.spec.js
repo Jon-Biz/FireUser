@@ -62,18 +62,18 @@ describe('FirebaseRef Service', function () {
       });
 
       it("should call the Firebase Global with the apropriate url", inject(function(FireUserValues) {
-              var url = FireUserValues.url + FireUserValues.dataLocation + '/' + this.user.id
-              this.scope.$emit('$firebaseSimpleLogin:login',this.user);
-              expect(window.Firebase.args[1][0]).toEqual(url);
-            }));
+        var url = FireUserValues.url + FireUserValues.dataLocation + '/' + this.user.id
+        this.scope.$emit('$firebaseSimpleLogin:login',this.user);
+        expect(window.Firebase.args[1][0]).toEqual(url);
+      }));
 
       it("should rebroadcast login messages", inject(function($fireUser) {
-              var loginSpy = sinon.spy();
-              this.scope.$on($fireUser.LOGIN_EVENT,loginSpy);
-              this.scope.$emit('$firebaseSimpleLogin:login',this.user);
-      
-              expect(loginSpy).toHaveBeenCalled();
-            }));
+        var loginSpy = sinon.spy();
+        this.scope.$on($fireUser.LOGIN_EVENT,loginSpy);
+        this.scope.$emit('$firebaseSimpleLogin:login',this.user);
+
+        expect(loginSpy).toHaveBeenCalled();
+      }));
     });
   });
 });
