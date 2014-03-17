@@ -68,6 +68,7 @@ function($rootScope, $location, $fireUser, $state, FireUserValues,waitForAuth) {
 
 
     // kickoff the authentication call (fires events $firebaseAuth:* events)
+
     var auth = $firebaseSimpleLogin(new Firebase(FireUserValues.url), {'path': FireUserValues.redirectPath});
     var self = this;
     var unbind = null;    
@@ -97,7 +98,6 @@ function($rootScope, $location, $fireUser, $state, FireUserValues,waitForAuth) {
       $rootScope[FireUserValues.dataLocation].userInfo = user;
 
       _angularFireRef.$on('loaded', function(data) {
-        console.log('data loaded',data);
         $rootScope.$broadcast(self.USER_DATA_LOADED_EVENT, data);
       });
 
