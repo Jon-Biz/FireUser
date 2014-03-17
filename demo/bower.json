@@ -15,6 +15,8 @@
     "angular-ui-router": "~0.2.10",
     "firebase": "~1.0.2",
     "angularfire": "~0.6.0",
-    "fireuser": "~0.4.0"
+    "fireuser": "~0.4.0",
+    "bootstrap": "~3.1.1",
+    "fontawesome": "~4.0.3"
   }
 }
