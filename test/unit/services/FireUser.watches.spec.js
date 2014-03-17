@@ -75,9 +75,9 @@ describe('FirebaseRef Service', function () {
         expect(loginSpy).toHaveBeenCalled();
       }));
       it("should set $rootScope.data.userLoggedIn to true", inject(function($fireUser,$rootScope) {
-        expect(this.scope.data.userLoggedIn).toBeFalsey();
+        expect(this.scope.data.userLoggedIn).toBeFalsy();
         this.scope.$emit('$firebaseSimpleLogin:login',this.user);
-        expect(this.scope.data.userLoggedIn).toBeFalsey();
+        expect(this.scope.data.userLoggedIn).toBeTruthy();
       }));
     });
   });
