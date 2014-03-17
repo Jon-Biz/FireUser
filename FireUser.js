@@ -11,12 +11,8 @@ angular.module('fireUser', ['firebase','ui.router'])
 })
 .service('FireUserValues',['FireUserDefault','FireUserConfig',function (FireUserDefault,FireUserConfig) {
 
-  try {
-    if(!FireUserConfig.url) throw "heavens to betsy"
-  }catch(err){
-
-  }
-
+  if(!FireUserConfig.url) throw "No config Url. Please Add your URL.";
+  
   FireUserConfig = angular.extend(FireUserDefault,FireUserConfig);
   return FireUserConfig;
 }])
