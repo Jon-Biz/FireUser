@@ -1,0 +1,20 @@
+{
+  "name": "FireUserDemo",
+  "authors": [
+    "Jonathan El-Bizri <git@elbizri.com>",
+    "Austin Brown <thataustin@gmail.com>"
+  ],
+  "license": "MIT",
+  "version": "0.4.0",
+  "ignore": [
+    "node_modules",
+    "bower_components"
+  ],
+  "dependencies": {
+    "angular": "~1.2.7",
+    "angular-ui-router": "~0.2.10",
+    "firebase": "~1.0.2",
+    "angularfire": "~0.6.0",
+    "fireuser": "~0.4.0"
+  }
+}
