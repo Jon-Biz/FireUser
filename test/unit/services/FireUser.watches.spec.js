@@ -79,6 +79,14 @@ describe('FirebaseRef Service', function () {
         this.scope.$emit('$firebaseSimpleLogin:login',this.user);
         expect(this.scope.data.userLoggedIn).toBeTruthy();
       }));
+      it("and if followed by a logout message, should set $rootScope.data.userLoggedIn to false", inject(function($fireUser,$rootScope) {
+        expect(this.scope.data.userLoggedIn).toBeFalsy();
+        this.scope.$emit('$firebaseSimpleLogin:login',this.user);
+        expect(this.scope.data.userLoggedIn).toBeTruthy();
+        this.scope.$emit('$firebaseSimpleLogin:logout',this.user);
+        expect(this.scope.data.userLoggedIn).toBeFalsy();
+      }));
+      
     });
   });
 });

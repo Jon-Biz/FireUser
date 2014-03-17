@@ -72,6 +72,7 @@ function($rootScope, $location, $fireUser, $state, FireUserValues,waitForAuth) {
     var _angularFireRef = null;
 
     $rootScope.$on('$firebaseSimpleLogin:logout', function() {
+      $rootScope[FireUserValues.dataLocation].userLoggedIn = false;
       $rootScope.$broadcast(self.LOGOUT_EVENT);
     });
 
