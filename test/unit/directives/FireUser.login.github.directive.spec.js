@@ -1,6 +1,6 @@
 'use strict';
 
-xdescribe("Directive: FireUserLogin", function() {
+describe("Directive: FireUserLogin", function() {
 
   var scope;
 
@@ -27,9 +27,9 @@ xdescribe("Directive: FireUserLogin", function() {
         return this;
       };
 
-      $provide.value('FireUserConfig', { iconCss: 'fontawesome' });
+      $provide.value('FireUserConfig', { url:"test"});
       $provide.service('$firebase',firebaseMock);
-      $provide.service('$firebaseAuth',firebaseAuthStub);
+      $provide.service('$firebaseSimpleLogin',firebaseAuthStub);
     });
   });
 

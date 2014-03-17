@@ -17,14 +17,5 @@ describe('FirebaseRef Service', function () {
     expect(this.firebaseAuthStub).toHaveBeenCalled();
   }));
 
-  it('should call firebaseAuth with the FireUser global',inject(function($fireUser) {
-    expect(this.firebaseAuthStub).toHaveBeenCalled();
-    expect(this.firebaseAuthStub.args[0][0]).toEqual(this.FirebaseStub)    
-  }));
-
-  it('should call firebaseAuth with the redirect page as the 2nd arg',inject(function($fireUser,FireUserDefault) {
-    expect(this.firebaseAuthStub).toHaveBeenCalled();
-    expect(this.firebaseAuthStub.args[0][1]).toEqual({path:FireUserDefault.redirectPath})    
-  }));
 
 });

@@ -11,15 +11,15 @@ Mocks ={
       var router$state = Mocks.setupRouter(that);
 
       module('fireUser', function($provide) {
-        $provide.service('FireUserConfig',function () {return{}})
-        $provide.service('$firebase',firebaseMock);
+        $provide.service('FireUserConfig',function () {return {url:'test'}})
+        $provide.service('$firebase',function(){return firebaseMock});
         $provide.service('$firebaseSimpleLogin',firebaseAuthStub);
         $provide.service('$state',router$state);
       });
     },
     setupFirebaseJS: function (that) {
       var FirebaseStub = that.FirebaseStub = sinon.stub();
-      window.Firebase = function () {return FirebaseStub;};      
+      window.Firebase = FirebaseStub;      
     },
     setupAngularFire:function () {
       angular.module('firebase',[])
@@ -33,7 +33,10 @@ Mocks ={
       return (function () {return firebaseAuthStub;});
     },
     setupFirebaseMock:function (that) {
-      return (function () {return this;})
+      that.FirebaseInstance = sinon.stub().returns(sinon.stub())
+
+      that.FirebaseService = sinon.stub().returns(that.FirebaseInstance);
+      return that.FirebaseService;
     },
     setupRouter:function (that) {
       var angularUiRouter = sinon.stub();
