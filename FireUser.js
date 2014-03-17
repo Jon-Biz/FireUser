@@ -52,6 +52,7 @@ function($rootScope, $location, $fireUser, $state, FireUserValues,waitForAuth) {
 
     // create data scope 
     $rootScope[FireUserValues.dataLocation] = {};
+    $rootScope[FireUserValues.dataLocation].userLoggedIn = false;
 
     // Possible events broadcasted by this service
     this.USER_CREATED_EVENT = 'fireuser:user_created';
@@ -92,6 +93,7 @@ function($rootScope, $location, $fireUser, $state, FireUserValues,waitForAuth) {
       });
 
       $rootScope[FireUserValues.dataLocation].userInfo = user;
+      $rootScope[FireUserValues.dataLocation].userLoggedIn = true;
 
       _angularFireRef.$on('loaded', function(data) {
         $rootScope.$broadcast(self.USER_DATA_LOADED_EVENT, data);
@@ -135,6 +137,7 @@ function($rootScope, $location, $fireUser, $state, FireUserValues,waitForAuth) {
     };
 
     this.logout = function() {
+      $rootScope[FireUserValues.dataLocation].userLoggedIn = false;
       unbind();
       auth.$logout();
     };
