@@ -148,40 +148,17 @@ module.exports = function (grunt) {
 
     karma: {
       unit: {
-        configFile: 'karma-unit.conf.js',
+        configFile: 'test/karma-unit.conf.js',
         singleRun: true,
         autoWatch: false
       },
       unitAuto: {
-        configFile: 'karma-unit.conf.js',
+        configFile: 'test/karma-unit.conf.js',
         singleRun: false,
         autoWatch: true
-      // },
-      // midway: {
-      //   configFile: './test/karma-midway.conf.js',
-      //   autoWatch: false,
-      //   singleRun: true
-      // },
-      // midwayAuto: {
-      //   configFile: './test/karma-midway.conf.js',
-      //   singleRun: false,
-      //   autoWatch: true
-      // },
-      // e2e: {
-      //   configFile: './test/karma-e2e.conf.js',
-      //   autoWatch: false,
-      //   singleRun: true
-      // },
-      // e2eAuto: {
-      //   configFile: './test/karma-e2e.conf.js',
-      //   singleRun: false,
-      //   autoWatch: true
       }
     }
-
   });
-
-
 
   grunt.registerTask('test:unit', [
     'clean:server',

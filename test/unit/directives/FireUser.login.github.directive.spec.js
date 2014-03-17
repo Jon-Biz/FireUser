@@ -27,9 +27,9 @@ describe("Directive: FireUserLogin", function() {
         return this;
       };
 
-      $provide.value('FireUserConfig', { iconCss: 'fontawesome' });
+      $provide.value('FireUserConfig', { url:"test"});
       $provide.service('$firebase',firebaseMock);
-      $provide.service('$firebaseAuth',firebaseAuthStub);
+      $provide.service('$firebaseSimpleLogin',firebaseAuthStub);
     });
   });
 

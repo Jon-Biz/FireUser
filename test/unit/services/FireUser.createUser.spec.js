@@ -6,12 +6,6 @@ describe('FirebaseRef Service', function () {
   beforeEach(function() {
 
     Mocks.setupFireUser(this);
-    // mocks angularFire module
-    // creates stubs 
-    //  this.Firebase (Firebase global)
-    //  this.firebaseMock (Angular Firebase service)
-    //  this.firebaseAuthStub (Angular Firebase Auth provider)
-    //  this.firebaseAuthMock (Angular Firebase Auth returned service)
 
   });
 
@@ -19,14 +13,14 @@ describe('FirebaseRef Service', function () {
       beforeEach(inject(function ($fireUser, $q) {
 
         this.q = $q.defer();
-        this.firebaseAuthMock.$createUser = sinon.stub().returns(this.q);
+        this.firebaseAuthMock.$createUser = sinon.stub().returns(this.q.promise);
         this.user = {email:'test',password:'test'};
 
       }))
 
       it("should be defined", inject(function($fireUser) {
         var createUser = $fireUser.createUser(this.user)
-        expect($fireUser.createUser(this.user)).toBeDefined();
+        expect($fireUser).toBeDefined();
       }));
 
       it("should call FBauth $createuser", inject(function($fireUser) {

@@ -6,12 +6,6 @@ describe('FirebaseRef Service', function () {
   beforeEach(function() {
 
     Mocks.setupFireUser(this);
-    // mocks angularFire module
-    // creates stubs 
-    //  this.Firebase (Firebase global)
-    //  this.firebaseMock (Angular Firebase service)
-    //  this.firebaseAuthStub (Angular Firebase Auth provider)
-    //  this.firebaseAuthMock (Angular Firebase Auth returned service)
 
     this.firebaseAuthMock.$login = sinon.stub().returns();
 

@@ -6,32 +6,41 @@ Mocks ={
 
       Mocks.setupAngularFire();
 
-      firebaseAuthStub = Mocks.setupFirebaseAuthMock(that);
-      firebaseMock = Mocks.setupFirebaseMock(that);
+      var firebaseAuthStub = Mocks.setupFirebaseAuthMock(that);
+      var firebaseMock = Mocks.setupFirebaseMock(that);
+      var router$state = Mocks.setupRouter(that);
 
       module('fireUser', function($provide) {
-        var firebaseMock = function () {return this;}
-        $provide.service('$firebase',firebaseMock);
-        $provide.service('$firebaseAuth',firebaseAuthStub);
+        $provide.service('FireUserConfig',function () {return {url:'test'}})
+        $provide.service('$firebase',function(){return firebaseMock});
+        $provide.service('$firebaseSimpleLogin',firebaseAuthStub);
+        $provide.service('$state',router$state);
       });
     },
     setupFirebaseJS: function (that) {
       var FirebaseStub = that.FirebaseStub = sinon.stub();
-      window.Firebase = function () {return FirebaseStub;};      
+      window.Firebase = FirebaseStub;      
+    },
+    setupAngularFire:function () {
+      angular.module('firebase',[])
+      module('firebase')
     },
     setupFirebaseAuthMock:function (that) {
-      // sets up firebaseAuthMock as Mock for methods
-      // sets up firebaseAuthStub as Stub of firebaseAuth service and returns the auth;
+
       that.firebaseAuthMock = {};
       var firebaseAuthStub = that.firebaseAuthStub = sinon.stub().returns(that.firebaseAuthMock);
 
       return (function () {return firebaseAuthStub;});
     },
     setupFirebaseMock:function (that) {
-      return (function () {return this;})
+      that.FirebaseInstance = sinon.stub().returns(sinon.stub())
+
+      that.FirebaseService = sinon.stub().returns(that.FirebaseInstance);
+      return that.FirebaseService;
     },
-    setupAngularFire:function () {
-      angular.module('firebase',[])
-      module('firebase')
+    setupRouter:function (that) {
+      var angularUiRouter = sinon.stub();
+      return angularUiRouter;
     }
+
 }

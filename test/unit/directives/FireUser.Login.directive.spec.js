@@ -5,31 +5,9 @@ describe("Directive: FireUserLoginForm", function() {
   var scope; 
 
   beforeEach(function () {
-    // AngularFirebase Module    
-    angular.module('firebase',[])
-    module('firebase')
-
-    var FirebaseStub = this.FirebaseStub = sinon.stub();
-    window.Firebase = function () {
-      return FirebaseStub;
-    };
-
-    var firebaseAuthStub = this.firebaseAuthStub = sinon.stub();
-    var firebaseAuthStub = function () {return firebaseAuthStub;}
-
-    module('fireUser', function($provide) {
-
-      var firebaseMock = function () {
-        return this;
-      }
-
-      var FBOpts = {};      
-      $provide.constant('FBOpts', FBOpts);
-      $provide.service('$firebase',firebaseMock);
-      $provide.service('$firebaseAuth',firebaseAuthStub);
-    });
+    Mocks.setupFireUser(this);
   });
-
+ 
   beforeEach(inject(function($rootScope) {
       scope = $rootScope.$new();
     }));
@@ -37,6 +15,10 @@ describe("Directive: FireUserLoginForm", function() {
   beforeEach(function() {
        this.element = angular.element('<fireuserloginform>');      
   });
+
+  xit("", inject(function($compile) {
+      this.element = $compile(this.element)(scope);
+    }));
 
 
 });
