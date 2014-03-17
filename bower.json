@@ -5,7 +5,7 @@
     "Austin Brown <thataustin@gmail.com>"
   ],
   "license": "MIT",
-  "version": "0.4.2",
+  "version": "0.4.4",
   "ignore": [
     "**/.*",
     "node_modules",
