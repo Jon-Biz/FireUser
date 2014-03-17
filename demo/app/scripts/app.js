@@ -2,6 +2,7 @@
 
 angular.module('fireUser').value('FireUserConfig',{
     url:"https://fireuser.firebaseio.com/",
+    redirectPath:'/login',
     datalocation:"FireUser",
     userdata:"data",
     routing:true

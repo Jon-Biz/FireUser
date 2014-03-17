@@ -2,7 +2,7 @@
 
 angular.module('fireUser', ['firebase','ui.router'])
 .constant('FireUserDefault', {
-  redirectPath:'/login',
+  redirectPath:'/',
   dataLocation:'data',
   userData:'user',
   routing: false,
@@ -11,18 +11,15 @@ angular.module('fireUser', ['firebase','ui.router'])
 })
 .service('FireUserValues',['FireUserDefault','FireUserConfig',function (FireUserDefault,FireUserConfig) {
 
-  try {
-    if(!FireUserConfig.url) throw "url is missing"
-  }catch(err){
-
-  }
-
+  if(!FireUserConfig.url) throw "No config Url. Please Add your URL.";
+  
   FireUserConfig = angular.extend(FireUserDefault,FireUserConfig);
   return FireUserConfig;
 }])
 .run(['$rootScope', '$location', '$fireUser', '$state','FireUserValues','waitForAuth', 
 function($rootScope, $location, $fireUser, $state, FireUserValues,waitForAuth) {
   if(FireUserValues.routing){
+
     var checked;
 
     $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
@@ -67,6 +64,7 @@ function($rootScope, $location, $fireUser, $state, FireUserValues,waitForAuth) {
 
 
     // kickoff the authentication call (fires events $firebaseAuth:* events)
+
     var auth = $firebaseSimpleLogin(new Firebase(FireUserValues.url), {'path': FireUserValues.redirectPath});
     var self = this;
     var unbind = null;    
@@ -92,11 +90,10 @@ function($rootScope, $location, $fireUser, $state, FireUserValues,waitForAuth) {
       _angularFireRef.$bind($rootScope, userDataLocation).then(function(unb) {
         unbind = unb;
       });
-      console.log('user',user)
+
       $rootScope[FireUserValues.dataLocation].userInfo = user;
 
       _angularFireRef.$on('loaded', function(data) {
-        console.log('data loaded',data);
         $rootScope.$broadcast(self.USER_DATA_LOADED_EVENT, data);
       });
 
@@ -140,7 +137,6 @@ function($rootScope, $location, $fireUser, $state, FireUserValues,waitForAuth) {
     this.logout = function() {
       unbind();
       auth.$logout();
-      $rootScope.$broadcast(self.LOGOUT_EVENT);
     };
 
     this.changepassword = function (email, oldPassword, newPassword,callback) {
@@ -226,7 +222,7 @@ function($rootScope, $location, $fireUser, $state, FireUserValues,waitForAuth) {
             'Email <input class="form-control" type="email" name="email" ng-model="email" required/>'+
           '</formgroup>'+
           '<formgroup>'+
-            'Password <input class="form-control" type="text" name="password" ng-model="password" required/>'+
+            'Password <input class="form-control" type="password" name="password" ng-model="password" required/>'+
           '</formgroup>'+
           '<br />'+
           '<button id="submitBtn" class="btn btn-primary pull-right" type="submit" value="login">Log in</button>'+
