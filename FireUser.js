@@ -12,13 +12,24 @@ angular.module('fireUser', ['firebase','ui.router'])
 .service('FireUserValues',['FireUserDefault','FireUserConfig',function (FireUserDefault,FireUserConfig) {
 
   if(!FireUserConfig.url) throw "No config Url. Please Add your URL.";
-  
+
   FireUserConfig = angular.extend(FireUserDefault,FireUserConfig);
+
   return FireUserConfig;
 }])
 .run(['$rootScope', '$location', '$fireUser', '$state','FireUserValues','waitForAuth', 
 function($rootScope, $location, $fireUser, $state, FireUserValues,waitForAuth) {
   if(FireUserValues.routing){
+
+    var routeAccess;
+
+    if(FireUserValues.routing === 'private'){
+      routeAccess = toState[FireUserValues.routeAccess]
+    } else if(FireUserValues.routing === 'public'){
+      routeAccess = !toState[FireUserValues.routeAccess]
+    } else {
+      throw "FireUserConfig.routeAccess type badly defined. Must be string 'private' or 'public'"
+    };
 
     var checked;
 
@@ -28,7 +39,7 @@ function($rootScope, $location, $fireUser, $state, FireUserValues,waitForAuth) {
         event.preventDefault();
 
         waitForAuth.then(function() {
-           if(!toState[FireUserValues.routeAccess] && !$rootScope[FireUserValues.dataLocation].userInfo){
+           if(!routeAccess] && !$rootScope[FireUserValues.dataLocation].userInfo){
 
               $state.go(FireUserValues.routeRedirect)
 
