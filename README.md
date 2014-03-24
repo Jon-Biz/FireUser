@@ -13,6 +13,7 @@ http://glaring-fire-5689.firebaseapp.com/
 
 You can log in with github, twitter, or create an account with an email address and password. After login, you will be redirected to the main page, where a text field appears that persists between logins.
 
+
 ## What's New in version 0.4.0
 
 *Major Changes*
@@ -171,7 +172,7 @@ If you want to build your own directives, include or `require` these controllers
 
 `$scope.login(name, password)`
 
-### `LogoutCtrl`
+### `fuLogoutCtrl`
 
 `$scope.logout()`
 
