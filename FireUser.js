@@ -179,7 +179,7 @@ function($rootScope, $location, $fireUser, $state, FireUserValues,waitForAuth) {
 .controller('fireuserloginCtrl',['$scope','$fireUser',function ($scope, $fireUser) {
   $scope.login = $fireUser.login;
   }])
-.directive('fireuserlogin', ['FireUserValues', function(FireUserValues) {
+.directive('fulogin', ['FireUserValues', function(FireUserValues) {
     return {
       scope:{
         type:'@'
@@ -196,7 +196,7 @@ function($rootScope, $location, $fireUser, $state, FireUserValues,waitForAuth) {
 .controller('fireuserlogoutCtrl',['$scope','$fireUser',function ($scope, $fireUser) {
   $scope.logout = $fireUser.logout;
   }])
-.directive('fireuserlogout', [function() {
+.directive('fulogout', [function() {
     return {
       scope:{
         type:'@'
@@ -214,7 +214,7 @@ function($rootScope, $location, $fireUser, $state, FireUserValues,waitForAuth) {
       };
 
     }])
-.directive('fireuserloginform', ['$compile', 'FireUserValues', function ($compile,FireUserValues) {
+.directive('fuloginform', ['$compile', 'FireUserValues', function ($compile,FireUserValues) {
   return {
     scope:{},
     restrict:'E',
@@ -243,7 +243,7 @@ function($rootScope, $location, $fireUser, $state, FireUserValues,waitForAuth) {
       };
 
 }])
-.directive('fireusersignupform', ['$compile', 'FireUserValues', function ($compile,FireUserValues) {
+.directive('fusignupform', ['$compile', 'FireUserValues', function ($compile,FireUserValues) {
   return {
     scope:{},
     restrict:'E',
