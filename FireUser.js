@@ -12,14 +12,15 @@ angular.module('fireUser', ['firebase','ui.router'])
 .service('FireUserValues',['FireUserDefault','FireUserConfig',function (FireUserDefault,FireUserConfig) {
 
   if(!FireUserConfig.url) throw "No config Url. Please Add your URL.";
-  
   FireUserConfig = angular.extend(FireUserDefault,FireUserConfig);
+
   return FireUserConfig;
 }])
 .run(['$rootScope', '$location', '$fireUser', '$state','FireUserValues','waitForAuth', 
 function($rootScope, $location, $fireUser, $state, FireUserValues,waitForAuth) {
   if(FireUserValues.routing){
 
+    if(FireUserValeus)
     var checked;
 
     $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
@@ -28,7 +29,7 @@ function($rootScope, $location, $fireUser, $state, FireUserValues,waitForAuth) {
         event.preventDefault();
 
         waitForAuth.then(function() {
-           if(!toState[FireUserValues.routeAccess] && !$rootScope[FireUserValues.dataLocation].userInfo){
+           if(toState[FireUserValues.routeAccess] && !$rootScope[FireUserValues.dataLocation].userInfo){
 
               $state.go(FireUserValues.routeRedirect)
 
@@ -70,9 +71,10 @@ function($rootScope, $location, $fireUser, $state, FireUserValues,waitForAuth) {
     var self = this;
     var unbind = null;    
     var _angularFireRef = null;
-
+  
     $rootScope.$on('$firebaseSimpleLogin:logout', function() {
       $rootScope[FireUserValues.dataLocation].userLoggedIn = false;
+
       $rootScope.$broadcast(self.LOGOUT_EVENT);
     });
 
@@ -97,6 +99,7 @@ function($rootScope, $location, $fireUser, $state, FireUserValues,waitForAuth) {
       $rootScope[FireUserValues.dataLocation].userLoggedIn = true;
 
       _angularFireRef.$on('loaded', function(data) {
+
         $rootScope.$broadcast(self.USER_DATA_LOADED_EVENT, data);
       });
 
@@ -126,12 +129,15 @@ function($rootScope, $location, $fireUser, $state, FireUserValues,waitForAuth) {
     };
 
     this.login = function(type,user) {
-
       if(type === 'password'){
         auth.$login('password',{
           email: user.email,
           password: user.password
-        });
+        }).then(function(user) {
+           console.log('Logged in as: ', user.uid);
+        }, function(error) {
+           console.error('Login failed: ', error);
+        });;
       } else {
         auth.$login(type);
       }
@@ -141,6 +147,7 @@ function($rootScope, $location, $fireUser, $state, FireUserValues,waitForAuth) {
       $rootScope[FireUserValues.dataLocation].userLoggedIn = false;
       unbind();
       auth.$logout();
+
     };
 
     this.changepassword = function (email, oldPassword, newPassword,callback) {
@@ -152,6 +159,7 @@ function($rootScope, $location, $fireUser, $state, FireUserValues,waitForAuth) {
     };
 
     return this;
+
   }
 ])
 .service('waitForAuth', function($rootScope, $q, $timeout) {
@@ -165,7 +173,6 @@ function($rootScope, $location, $fireUser, $state, FireUserValues,waitForAuth) {
       $timeout(function() {
         // force $scope.$apply to be re-run after login resolves
         def.resolve();
-        console.log('resolved')
       });
     }
  
@@ -177,7 +184,9 @@ function($rootScope, $location, $fireUser, $state, FireUserValues,waitForAuth) {
 
   })
 .controller('fireuserloginCtrl',['$scope','$fireUser',function ($scope, $fireUser) {
-  $scope.login = $fireUser.login;
+    $scope.login = function(type) {
+      $fireUser.login(type);
+    };
   }])
 .directive('fulogin', ['FireUserValues', function(FireUserValues) {
     return {
@@ -208,10 +217,9 @@ function($rootScope, $location, $fireUser, $state, FireUserValues,waitForAuth) {
     };
   }])
 .controller('fireuserloginformCtrl',['$scope', '$fireUser', function ($scope, $fireUser) {
-
-      $scope.login = function () {
-        $fireUser.login('password',{ email: $scope.email, password: $scope.password });
-      };
+    $scope.login = function () {
+      $fireUser.login('password',{ 'email': $scope.email, 'password': $scope.password });
+    };
 
     }])
 .directive('fuloginform', ['$compile', 'FireUserValues', function ($compile,FireUserValues) {
@@ -229,7 +237,7 @@ function($rootScope, $location, $fireUser, $state, FireUserValues,waitForAuth) {
             'Password <input class="form-control" type="password" name="password" ng-model="password" required/>'+
           '</formgroup>'+
           '<br />'+
-          '<button id="submitBtn" class="btn btn-primary pull-right" type="submit" value="login">Log in</button>'+
+          '<button id="submitBtn" class="btn btn-primary pull-right" type="submit">Log in</button>'+
         '</form>'
       );
       $compile(element.contents())($scope);
