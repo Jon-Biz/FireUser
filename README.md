@@ -73,6 +73,7 @@ Here's one with all the optional configuration parameters set:
 		routeRedirect: 'login'
 		dataLocation: "nameOfRootDataDir",	
 		userData: "nameofuserdatalocation"
+		});
 
 `url`: this is your firebase url. 
 
