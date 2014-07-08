@@ -110,23 +110,18 @@ function($rootScope, $location, $fireUser, $state, FireUserValues,waitForAuth) {
       $rootScope.$broadcast(self.LOGIN_EVENT, user);
     });
 
-    this.createUser = function (user) {
-
-      var userCreationSuccess = function () {
-        $rootScope.$broadcast(self.USER_CREATED_EVENT,user);
-        $log.info('User created - User Id: ' + user.id + ', Email: ' + user.email);
-      }
-
-      var userCreationError = function (error) {
-        $rootScope.$broadcast(self.USER_CREATION_ERROR_EVENT,error);
-        $log.error(error);
-      }
-
-      var createUser = auth.$createUser(user.email, user.password)
-        .then(userCreationSuccess,userCreationError);
-
-      return createUser;
-    };
+    this.createUser = function createUser(user){
+      auth.$createUser(user.email, user.password)
+      .then(function (error,user) {
+        if(error){
+          $log.error(error);
+          $rootScope.$broadcast(self.USER_CREATION_ERROR_EVENT,error);
+        }else{
+          $rootScope.$broadcast(self.USER_CREATED_EVENT,user);
+          $log.info('User created - User Id: ' + user.id + ', Email: ' + user.email);
+        }
+      })
+    }
 
     this.login = function(type,user) {
       if(type === 'password'){
