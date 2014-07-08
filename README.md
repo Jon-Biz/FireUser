@@ -11,8 +11,7 @@ There is a simple demo here:
 
 http://glaring-fire-5689.firebaseapp.com/
 
-You can log in with github, twitter, or create an account with an email address and password. After login, you will be redirected to the main page, where a text field appears that persists between logins.
-
+You can log in with github, facebook or twitter, or create an account with an email address and password. After login, you will be redirected back to the main page, where you can add text items that will persist on Firebase betweeon logins. Clicking the log out button on the main page will return you to the login page.
 
 ## What's New in version 0.4.0
 
@@ -112,8 +111,6 @@ If you want to use another icon set, include the associated controller (`fuLogin
 
 This directive provides a login form for email/password based logins. It uses bootstrap's css to output this:
 
-
-
 ### Logging out
 
 ### `<fuLogOut />`
@@ -205,7 +202,6 @@ To run the tests install the development dependencies via bower (`bower install 
 
 To run the unit tests: run `grunt test:unit`
 The demo app also includes E2E tests, using protractor. To run these: `grunt test:e2e
-
 
 ## About
 
