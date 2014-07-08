@@ -9,7 +9,7 @@ FireUser handles user registration, login and databinding and includes directive
 
 There is a simple demo here:
 
-http://glaring-fire-5689.firebaseapp.com/
+http://fireuser.firebaseapp.com/
 
 You can log in with github, facebook or twitter, or create an account with an email address and password. After login, you will be redirected back to the main page, where you can add text items that will persist on Firebase betweeon logins. Clicking the log out button on the main page will return you to the login page.
 
