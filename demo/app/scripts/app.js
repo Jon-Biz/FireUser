@@ -1,39 +1,50 @@
 'use strict';
 
 angular.module('fireUser').value('FireUserConfig',{
-    url:"https://fireuser.firebaseio.com/",
+    url:"https://tiddlydone.firebaseio.com/",
     redirectPath:'/login',
     datalocation:"FireUser",
     userdata:"data",
     routing:true
     });
 
+
 angular.module('FireUserDemo', ['fireUser','ui.router'])
-  .run(function ($rootScope) {
-    $rootScope.loginstate = false;
+  .controller('Main',function ($scope,waitForAuth,$state){
+    waitForAuth.then(function () {
 
-    $rootScope.$on('fireuser:login',function (evt,user) {      
-      $rootScope.loginstate = true;
-    })
+      $scope.createItem = function () {
+        if(!$scope.data.user.items){
+          $scope.data.user = {};
+          $scope.data.user.items = []};
 
-    $rootScope.$on('fireuser:logout',function () {
-      $rootScope.loginstate = false;
+        $scope.data.user.items.push({'name':'new item'})
+      }
+      $scope.remove = function (item) {
+        var items = $scope.data.user.items;
+        for (var i = items.length - 1; i >= 0; i--) {
+          if(items[i] == item) {
+            items.splice(i,1);
+          }
+        };
+      }
 
+      $scope.$watch('data.userLoggedIn',function  (newVal,oldval) {
+        if(!newVal){
+          $state.go('login');
+        }else{
+          $scope.loginstatus = 'User '+$scope.data.userInfo.username+' logged in'              
+        }
+      })
     })
   })
-  .controller('Main',function ($scope,waitForAuth){
+  .controller('Login',function ($scope,waitForAuth,$state){
 
-//   $scope.loginstatus = 'not logged in'    
-    $scope.$watch('loginstate',function (newval,oldval) {
-      if(newval){
-        $scope.loginstatus = 'user '+$scope.data.userInfo.username+' logged in'              
-      } else {
-       $scope.loginstatus = 'not logged in'          
+    $scope.$watch('data.userLoggedIn',function  (newVal,oldval) {
+      if(newVal){
+        $state.go('home');
       }
     })
-
- 
-
   })
   .config(['$stateProvider','$urlRouterProvider',function ($stateProvider,$urlRouterProvider) {
   
@@ -43,14 +54,14 @@ angular.module('FireUserDemo', ['fireUser','ui.router'])
       $stateProvider
         .state('home',{
           url:'/',
-          templateUrl: 'views/home.html',
+          templateUrl: 'views/main.html',
           controller: 'Main',
           private:true
         })
         .state('login',{
           url:'/login',
-          templateUrl: 'views/home.html',
-          controller: 'Main',
+          templateUrl: 'views/login.html',
+          controller: 'Login',
           private:false
         })
 

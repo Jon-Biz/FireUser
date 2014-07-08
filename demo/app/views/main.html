@@ -1,0 +1,41 @@
+<div class="header">&nbsp</div>
+<div class="jumbotron">
+
+	<h2>Fire User Demo</h2>
+
+	<h3>Welcome! </h3>
+	<p><em>This is a demo of the FireUser user management library. </em></p>
+
+</div>
+	<p class="lead">{{loginstatus}}</p>
+	<p><em>You have been redirected to this page after logging in. If you log out, you will be redirected back to the login page.</em>
+	</p>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				Log Out Directive	
+			</div>
+			<div class="panel-body ">
+			 <fulogout class="btn btn-info"/></fulogout>
+			This button is the logout directive. Click it to log out.
+			</div>
+		</div>		
+		<div class="panel panel-default">
+			<div class="panel-heading">
+			Data
+			</div>
+			<div class="panel-body ">
+				<p>
+					<button class="btn btn-primary" ng-click="createItem()">
+						Create a new Data Item
+					</button>
+				</p>
+				<ul>
+					<li ng-repeat="item in data.user.items">
+					  <input type="text" ng-model="item.name" /><i class="fa fa-times" ng-click="remove(item)">
+					  </i>
+					</li>
+				</ul>
+				<p><em>This data is persisted in a firebase database.</em></p>
+			</div>
+		</div>		
+
