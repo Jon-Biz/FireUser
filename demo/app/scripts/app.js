@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('fireUser').value('FireUserConfig',{
-    url:"https://tiddlydone.firebaseio.com/",
+    url:"https://fireuser.firebaseio.com/",
     redirectPath:'/login',
     datalocation:"FireUser",
     userdata:"data",
