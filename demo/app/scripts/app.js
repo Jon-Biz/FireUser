@@ -30,10 +30,15 @@ angular.module('FireUserDemo', ['fireUser','ui.router'])
       }
 
       $scope.$watch('data.userLoggedIn',function  (newVal,oldval) {
+        var userInfo = $scope.data.userInfo
         if(!newVal){
           $state.go('login');
         }else{
-          $scope.loginstatus = 'User '+$scope.data.userInfo.username+' logged in'              
+          if(userInfo.provider == "password"){
+            $scope.loginstatus = 'User '+$scope.data.userInfo.email+' logged in'              
+          }else{
+            $scope.loginstatus = 'User '+$scope.data.userInfo.username+' logged in'              
+          }
         }
       })
     })
