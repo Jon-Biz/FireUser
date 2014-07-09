@@ -111,8 +111,8 @@ function($rootScope, $location, $fireUser, $state, FireUserValues,waitForAuth) {
     });
 
     this.createUser = function createUser(user){
-      auth.$createUser(user.email, user.password)
-      .then(function (error,user) {
+      var createUser  = auth.$createUser(user.email, user.password,false)
+      createUser.then(function (error,user) {
         if(error){
           $log.error(error);
           $rootScope.$broadcast(self.USER_CREATION_ERROR_EVENT,error);
@@ -121,6 +121,7 @@ function($rootScope, $location, $fireUser, $state, FireUserValues,waitForAuth) {
           $log.info('User created - User Id: ' + user.id + ', Email: ' + user.email);
         }
       })
+      return createUser;
     }
 
     this.login = function(type,user) {
@@ -130,7 +131,7 @@ function($rootScope, $location, $fireUser, $state, FireUserValues,waitForAuth) {
           password: user.password
         }).then(function(user) {
            console.log('Logged in as: ', user.uid);
-        }, function(error) {
+      }, function(error) {
            console.error('Login failed: ', error);
         });;
       } else {

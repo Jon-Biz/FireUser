@@ -7,7 +7,7 @@ describe('FirebaseRef Service', function () {
 
     Mocks.setupFireUser(this);
 
-    this.firebaseAuthMock.$login = sinon.stub().returns();
+    this.firebaseAuthMock.$login = sinon.stub().returns({then:function(){}});
 
   });
 

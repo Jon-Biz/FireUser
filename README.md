@@ -201,7 +201,12 @@ The demo app is included in this repo. Do a separate `bower install` within the 
 To run the tests install the development dependencies via bower (`bower install --dev`)
 
 To run the unit tests: run `grunt test:unit`
-The demo app also includes E2E tests, using protractor. To run these: `grunt test:e2e
+
+The demo app also includes E2E tests, using protractor. To run these:
+ - install protractor globally (`npm install protractor -g`)
+ - update webdriver - `webdriver-manager update`
+ - serve the `demo/app` directory to port 3333 (httpster works here too)
+ - run `protractor demo/test/protractor.conf.js' from the root directory.
 
 ## About
 

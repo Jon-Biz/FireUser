@@ -36,35 +36,31 @@ describe('FirebaseRef Service', function () {
       describe("then the returned promise is resolved", function() {
 
         it("should broadcast $fireUser.USER_CREATED_EVENT on $rootScope", inject(function($fireUser, $rootScope) {
-          var userWasCreated = false;
-          $rootScope.$on($fireUser.USER_CREATED_EVENT,function () {
-            userWasCreated = true;
-          })          
+          var userWasCreated = sinon.spy($rootScope,"$broadcast");
+
+          this.user.id = 'test';
 
           var createUser = $fireUser.createUser(this.user);
 
-          this.q.resolve();
+          this.q.resolve(true, this.user);
           $rootScope.$apply();
 
-          expect(userWasCreated).toBeTruthy();
+          expect(userWasCreated).toHaveBeenCalled();
         }));
 
       });
 
-      describe("then the returned promise is rejected", function() {
+      describe("when the returned promise fails", function() {
 
         it("should broadcast $fireUser.USER_CREATION_ERROR_EVENT on $rootScope", inject(function($fireUser, $rootScope) {
-          var userWasntCreated = false;
-          $rootScope.$on($fireUser.USER_CREATION_ERROR_EVENT,function () {
-            userWasntCreated = true;
-          })          
+          var userWasntCreated = sinon.spy($rootScope,"$broadcast");
 
           var createUser = $fireUser.createUser(this.user);
 
-          this.q.reject();
+          this.q.resolve(true);
           $rootScope.$apply();
 
-          expect(userWasntCreated).toBeTruthy();
+          expect(userWasntCreated).toHaveBeenCalled();
         }));
 
       });

@@ -39,7 +39,7 @@ describe("Directive: FireUserLogin", function() {
 
   describe("if it is used with 'type'='github'", function() {
     beforeEach(function() {
-         this.element = angular.element('<fireuserlogin type="github"/>');
+         this.element = angular.element('<fulogin type="github"/>');
     });
     it("should add the classes for the github icon", inject(function ($compile) {
          this.element = $compile(this.element)(scope);
@@ -50,7 +50,7 @@ describe("Directive: FireUserLogin", function() {
 
   describe("if it is used with 'type'='facebook'", function() {
     beforeEach(function() {
-         this.element = angular.element('<fireuserlogin type="facebook"/>');
+         this.element = angular.element('<fulogin type="facebook"/>');
     });
     it("should have the classes for facebook icon", inject(function ($compile) {
          this.element = $compile(this.element)(scope);
