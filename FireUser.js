@@ -20,7 +20,6 @@ angular.module('fireUser', ['firebase','ui.router'])
 function($rootScope, $location, $fireUser, $state, FireUserValues,waitForAuth) {
   if(FireUserValues.routing){
 
-    if(FireUserValues)
     var checked;
 
     $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
