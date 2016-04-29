@@ -3,6 +3,8 @@
 
 FireUser is a user management module for Angular Firebase applications.  
 
+**NOTE: 4/29/16 This project is no longer being maintained. Firebase's user management tools have come a long way to making this process easier, and I'm focused on Reactjs project for the time being. An equivalent set of React components may be coming shortly. If you find this repo useful and would to ownership of it, please let me know.**
+
 Configure FireUser with your firebase URL and data location, drop some of the accompanying directives into your app, and you are storing your users' data in your firebase database. FireUser now also handles routing permissions and redirection, so you can direct users to login before gaining access to parts of your site.
 
 FireUser handles user registration, login and databinding and includes directives supporting Firebase's email based login and third party login provider methods (ie - Github, Facebook, Twitter). These directives are skinned with Bootstrap and the FontAwesome css icon library. The controllers are also available, so you can include them in your own directives.
